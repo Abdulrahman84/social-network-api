@@ -34,12 +34,15 @@ exports.setProfilePhoto = async (req, res) => {
     if (!req.file)
       return res.status(400).send({ error: "please upload a photo" });
 
-    if (req.user.cloudinary_id)
-      await cloudinary.uploader.destroy(req.user.cloudinary_id);
+    if (req.user.cl_profilePhoto_id)
+      await cloudinary.uploader.destroy(req.user.cl_profilePhoto_id);
 
-    const result = await cloudinary.uploader.upload(req.file.path);
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "social-network",
+      use_filename: true,
+    });
     req.user.profilePhoto = result.secure_url;
-    req.user.cloudinary_id = result.public_id;
+    req.user.cl_profilePhoto_id = result.public_id;
 
     await req.user.save();
     res.send(req.user);
@@ -47,4 +50,59 @@ exports.setProfilePhoto = async (req, res) => {
     console.log(e);
     res.send(e);
   }
+};
+
+exports.setCoverImage = async (req, res) => {
+  try {
+    if (!req.file)
+      return res.status(400).send({ error: "please upload a photo" });
+
+    if (req.user.cl_coverImage_id)
+      await cloudinary.uploader.destroy(req.user.cl_coverImage_id);
+
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "social-network",
+      use_filename: true,
+    });
+
+    req.user.coverImage = result.secure_url;
+    req.user.cl_coverImage_id = result.public_id;
+
+    await req.user.save();
+    res.send(req.user);
+  } catch (e) {
+    console.log(e);
+    res.send(e);
+  }
+};
+
+exports.addPersonalInfo = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty())
+    return res.status(400).send({ error: errors.array()[0].msg });
+
+  const { location, socialCondition, work, study, bio, religion } = req.body;
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        location,
+        socialCondition,
+        work,
+        study,
+        bio,
+        religion,
+      },
+      { new: true }
+    );
+    res.send(user);
+  } catch (e) {
+    res.status(500).send({ error: e });
+    console.log(e);
+  }
+};
+
+exports.getProfile = async (req, res) => {
+  const user = await User.findById(req.user._id);
+  res.send(user);
 };

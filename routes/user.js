@@ -4,7 +4,7 @@ const { body, check } = require("express-validator");
 const User = require("../models/User");
 const userController = require("../controllers/userController");
 const auth = require("../middleware/auth");
-const { upload, cloudinary } = require("../middleware/upload");
+const upload = require("../middleware/upload");
 
 const router = express.Router();
 
@@ -44,10 +44,36 @@ router.post(
   "/profilePhoto",
   auth,
   upload.single("profilePhoto"),
-  userController.setProfilePhoto,
-  (error, req, res, next) => {
-    res.status(400).send({ error: error.message });
-  }
+  userController.setProfilePhoto
 );
+
+router.post(
+  "/coverImage",
+  auth,
+  upload.single("coverImage"),
+  userController.setCoverImage
+);
+
+router.post(
+  "/personalInfo",
+  [
+    body("location", "invalid location")
+      .isString()
+      .optional({ nullable: true }),
+    body("religion", "invalid religion")
+      .isString()
+      .optional({ nullable: true }),
+    body("study", "invalid study").isString().optional({ nullable: true }),
+    body("work", "invalid work").isString().optional({ nullable: true }),
+    body("bio", "invalid bio").exists().isString().optional({ nullable: true }),
+    body("socialCondition", "invalid social condition")
+      .isString()
+      .optional({ nullable: true }),
+  ],
+  auth,
+  userController.addPersonalInfo
+);
+
+router.get("/profile", auth, userController.getProfile);
 
 module.exports = router;

@@ -18,6 +18,12 @@ app.use(postRouter);
 
 app.get("/", (req, res) => res.send("Hi there"));
 
+app.use((error, req, res, next) => {
+  res.status(400).send({ error: error.message });
+  console.log(error);
+  next();
+});
+
 mongoose.connect(
   process.env.MONGODB_URI,
   { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false },
