@@ -29,6 +29,12 @@ const userSchema = new mongoose.Schema({
   work: String,
   religion: String,
   bio: String,
+  birthDate: {
+    type: Date,
+    min: "1950-01-01",
+    max: Date.now() - 10,
+  },
+  geneder: String,
 });
 
 userSchema.virtual("posts", {

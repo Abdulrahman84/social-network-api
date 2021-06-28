@@ -9,7 +9,7 @@ exports.register = async (req, res) => {
   try {
     const user = new User(req.body);
     const token = user.generateAuthToken();
-    user.save();
+    await user.save();
     res.send({ token });
   } catch (e) {
     res.status(400).send({ error: e.message });
@@ -102,7 +102,13 @@ exports.addPersonalInfo = async (req, res) => {
   }
 };
 
-exports.getProfile = async (req, res) => {
+exports.getMyProfile = async (req, res) => {
   const user = await User.findById(req.user._id);
+  res.send(user);
+};
+
+exports.getProfile = async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (!user) return res.status(404).send({ error: "no user found" });
   res.send(user);
 };

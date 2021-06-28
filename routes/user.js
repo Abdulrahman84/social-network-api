@@ -27,6 +27,8 @@ router.post(
       .exists()
       .isLength({ min: 5, max: 30 })
       .trim(),
+    body("birthDate", "invalid birth date").exists().isDate(),
+    body("gender", "invalid gender").exists().isString(),
   ],
   userController.register
 );
@@ -65,7 +67,11 @@ router.post(
       .optional({ nullable: true }),
     body("study", "invalid study").isString().optional({ nullable: true }),
     body("work", "invalid work").isString().optional({ nullable: true }),
-    body("bio", "invalid bio").exists().isString().optional({ nullable: true }),
+    body("bio", "invalid bio").isString().optional({ nullable: true }),
+    body("gender", "invalid study").isString().optional({ nullable: true }),
+    body("birthDate", "invalid birthYear")
+      .isNumeric()
+      .optional({ nullable: true }),
     body("socialCondition", "invalid social condition")
       .isString()
       .optional({ nullable: true }),
@@ -74,6 +80,8 @@ router.post(
   userController.addPersonalInfo
 );
 
-router.get("/profile", auth, userController.getProfile);
+router.get("/myProfile", auth, userController.getMyProfile);
+
+router.get("/profile/:id", userController.getProfile);
 
 module.exports = router;
