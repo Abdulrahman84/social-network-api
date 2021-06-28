@@ -20,10 +20,10 @@ npm run dev (nodemon) (port 3000)
 - Login (email, password)
   - https://h-social-network.herokuapp.com/login
 
-- Set/update profile photo
+- Set/update profile photo (profilePhoto)
   - https://h-social-network.herokuapp.com/profilePhoto
  
-- Set/update cover image
+- Set/update cover image (image)
   - https://h-social-network.herokuapp.com/coverImage
 
 - Add personal information: all fields are optional (location, socialCondition, work, study, birthYear, bio, religion)
