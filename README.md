@@ -26,7 +26,7 @@ npm run dev (nodemon) (port 3000)
 - Set/update cover image (image)
   - https://h-social-network.herokuapp.com/coverImage
 
-- Add personal information: all fields are optional (location, socialCondition, work, study, birthYear, bio, religion)
+- Add personal information: all fields are optional (location, socialCondition, work, study, bio, religion)
   - https://h-social-network.herokuapp.com/personalInfo
 
 - Add a new post : required ( content ), optional ( image, location )
