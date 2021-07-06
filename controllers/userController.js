@@ -34,8 +34,13 @@ exports.setProfilePhoto = async (req, res) => {
     if (!req.file)
       return res.status(400).send({ error: "please upload a photo" });
 
-    if (req.user.cl_profilePhoto_id)
-      await cloudinary.uploader.destroy(req.user.cl_profilePhoto_id);
+    if (req.user.cl_profilePhoto_id) {
+      const oldPhoto = {
+        cl_profilePhoto_id: req.user.cl_profilePhoto_id,
+        profilePhoto: req.user.profilePhoto,
+      };
+      req.user.previousProfilePhotos.push(oldPhoto);
+    }
 
     const result = await cloudinary.uploader.upload(req.file.path, {
       folder: "social-network",
@@ -45,7 +50,7 @@ exports.setProfilePhoto = async (req, res) => {
     req.user.cl_profilePhoto_id = result.public_id;
 
     await req.user.save();
-    res.send(req.user);
+    res.send(req.user.deleteExtraInfo());
   } catch (e) {
     console.log(e);
     res.send(e);
@@ -69,7 +74,7 @@ exports.setCoverImage = async (req, res) => {
     req.user.cl_coverImage_id = result.public_id;
 
     await req.user.save();
-    res.send(req.user);
+    res.send(req.user.deleteExtraInfo());
   } catch (e) {
     console.log(e);
     res.send(e);
@@ -103,12 +108,58 @@ exports.addPersonalInfo = async (req, res) => {
 };
 
 exports.getMyProfile = async (req, res) => {
-  const user = await User.findById(req.user._id);
-  res.send(user);
+  const user = req.user;
+  res.send({
+    user: user.deleteExtraInfo(),
+    numberOfFollowers: user.followers.length,
+    numberOfFollowing: user.following.length,
+  });
 };
 
 exports.getProfile = async (req, res) => {
   const user = await User.findById(req.params.id);
   if (!user) return res.status(404).send({ error: "no user found" });
-  res.send(user);
+  res.send({
+    user: user.deleteExtraInfo(),
+    numberOfFollowers: user.followers.length,
+    numberOfFollowing: user.following.length,
+  });
+};
+
+exports.updatePersonalInfo = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty())
+    return res.status(400).send({ error: errors.array()[0].msg });
+
+  const {
+    firstName,
+    lastName,
+    location,
+    socialCondition,
+    work,
+    study,
+    bio,
+    religion,
+    gender,
+    birthDate,
+  } = req.body;
+
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      firstName,
+      lastName,
+      location,
+      socialCondition,
+      work,
+      study,
+      bio,
+      religion,
+      gender,
+      birthDate,
+    },
+    { new: true }
+  );
+
+  res.send(user.deleteExtraInfo());
 };

@@ -84,4 +84,6 @@ router.get("/myProfile", auth, userController.getMyProfile);
 
 router.get("/profile/:id", userController.getProfile);
 
+router.put("/profile", auth, userController.updatePersonalInfo);
+
 module.exports = router;

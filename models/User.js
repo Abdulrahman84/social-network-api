@@ -23,6 +23,12 @@ const userSchema = new mongoose.Schema({
   cl_profilePhoto_id: String,
   coverImage: String,
   cl_coverImage_id: String,
+  previousProfilePhotos: [
+    {
+      cl_profilePhoto_id: String,
+      profilePhoto: String,
+    },
+  ],
   location: String,
   socialCondition: String,
   study: String,
@@ -35,6 +41,18 @@ const userSchema = new mongoose.Schema({
     max: Date.now() - 10,
   },
   geneder: String,
+  followers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      // ref: "Follow",
+    },
+  ],
+  following: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      // ref: "Follow",
+    },
+  ],
 });
 
 userSchema.virtual("posts", {
@@ -65,6 +83,16 @@ userSchema.pre("save", async function (next) {
   }
   next();
 });
+
+userSchema.methods.deleteExtraInfo = function () {
+  const user = this.toObject();
+
+  delete user.password;
+  delete user.cl_profilePhoto_id;
+  delete user.cl_coverImage_id;
+
+  return user;
+};
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;
