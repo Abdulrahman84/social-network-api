@@ -106,21 +106,13 @@ exports.addPersonalInfo = async (req, res) => {
 
 exports.getMyProfile = async (req, res) => {
   const user = req.user;
-  res.send({
-    user: user.deleteExtraInfo(),
-    numberOfFollowers: user.followers.length,
-    numberOfFollowing: user.following.length,
-  });
+  res.send(user.deleteExtraInfo());
 };
 
 exports.getProfile = async (req, res) => {
   const user = await User.findById(req.params.id);
   if (!user) return res.status(404).send({ error: "no user found" });
-  res.send({
-    user: user.deleteExtraInfo(),
-    numberOfFollowers: user.followers.length,
-    numberOfFollowing: user.following.length,
-  });
+  res.send(user.deleteExtraInfo());
 };
 
 exports.updatePersonalInfo = async (req, res) => {
