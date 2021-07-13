@@ -4,7 +4,6 @@ const postSchema = new mongoose.Schema(
   {
     content: {
       type: String,
-      required: true,
     },
     image: String,
     location: String,
@@ -18,5 +17,11 @@ const postSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+postSchema.virtual("comments", {
+  ref: "Comment",
+  localField: "_id",
+  foreignField: "post",
+});
 
 module.exports = mongoose.model("Post", postSchema);

@@ -44,7 +44,6 @@ exports.setProfilePhoto = async (req, res) => {
 
     const result = await cloudinary.uploader.upload(req.file.path, {
       folder: "social-network",
-      use_filename: true,
     });
     req.user.profilePhoto = result.secure_url;
     req.user.cl_profilePhoto_id = result.public_id;
@@ -67,7 +66,6 @@ exports.setCoverImage = async (req, res) => {
 
     const result = await cloudinary.uploader.upload(req.file.path, {
       folder: "social-network",
-      use_filename: true,
     });
 
     req.user.coverImage = result.secure_url;
@@ -76,7 +74,6 @@ exports.setCoverImage = async (req, res) => {
     await req.user.save();
     res.send(req.user.deleteExtraInfo());
   } catch (e) {
-    console.log(e);
     res.send(e);
   }
 };
@@ -162,4 +159,28 @@ exports.updatePersonalInfo = async (req, res) => {
   );
 
   res.send(user.deleteExtraInfo());
+};
+
+exports.deleteMainProfilePhoto = async (req, res) => {
+  if (!req.user.profilePhoto)
+    return res.send({ message: "No profile photo to delete" });
+
+  await cloudinary.uploader.destroy(req.user.cl_profilePhoto_id);
+  req.user.profilePhoto = null;
+  req.user.cl_profilePhoto_id = null;
+
+  await req.user.save();
+  res.send(req.user);
+};
+
+exports.deleteCoverImage = async (req, res) => {
+  if (!req.user.coverImage)
+    return res.send({ message: "No cover image to delete" });
+  if (req.user.cl_coverImage_id)
+    await cloudinary.uploader.destroy(req.user.cl_coverImage_id);
+  req.user.coverImage = null;
+  req.user.cl_coverImage_id = null;
+
+  await req.user.save();
+  res.send(req.user);
 };

@@ -13,7 +13,7 @@ router.post(
   [
     body("firstName", "invalid first name").exists().isAlphanumeric(),
     body("lastName", "invalid last name ").exists().isAlphanumeric(),
-    check("email", "inalid email")
+    check("email", "invalid email")
       .normalizeEmail()
       .isEmail()
       .custom(async (value) => {
@@ -85,5 +85,9 @@ router.get("/myProfile", auth, userController.getMyProfile);
 router.get("/profile/:id", userController.getProfile);
 
 router.put("/profile", auth, userController.updatePersonalInfo);
+
+router.delete("/mainProfilePhoto", auth, userController.deleteMainProfilePhoto);
+
+router.delete("/coverImage", auth, userController.deleteCoverImage);
 
 module.exports = router;

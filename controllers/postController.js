@@ -34,8 +34,7 @@ exports.addPost = async (req, res) => {
 
     res.send(post);
   } catch (e) {
-    console.log(e);
-    res.send(e);
+    res.send(e.message);
   }
 };
 
@@ -54,6 +53,12 @@ exports.getMyPosts = async (req, res) => {
     .limit(parseInt(req.query.limit))
     .skip(parseInt(req.query.skip));
   res.send(posts);
+};
+
+exports.getSinglePost = async (req, res) => {
+  const post = await Post.findOne({ _id: req.params.id }).populate("comments");
+  console.log(post);
+  res.send(post);
 };
 
 exports.deletePost = async (req, res) => {
