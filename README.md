@@ -23,7 +23,7 @@ npm run dev (nodemon) (port 3000)
 - Set/update profile photo (profilePhoto)
   - https://h-social-network.herokuapp.com/profilePhoto
  
-- Set/update cover image (image)
+- Set/update cover image (coverImage)
   - https://h-social-network.herokuapp.com/coverImage
 
 - Add personal information: all fields are optional (location, socialCondition, work, study, bio, religion)
@@ -52,5 +52,12 @@ npm run dev (nodemon) (port 3000)
 
 <h4>DELETE REQUESTS</h4>
 
+- Delete main profile photo
+  - https://h-social-network.herokuapp.com/mainProfilePhoto
+
+- Delete cover image
+  - https://h-social-network.herokuapp.com/coverImage
+  
 - Delete a post
   - https://h-social-network.herokuapp.com/deletePost/:postId
+ 
