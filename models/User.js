@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema({
     min: "1950-01-01",
     max: Date.now() - 10,
   },
-  geneder: String,
+  gender: String,
   followers: [
     {
       type: mongoose.Schema.Types.ObjectId,
