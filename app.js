@@ -6,7 +6,7 @@ const cors = require("cors");
 const userRouter = require("./routes/user");
 const postRouter = require("./routes/post");
 const followRouter = require("./routes/follow");
-const commentRouter = require("./routes/comment");
+// const commentRouter = require("./routes/comment");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(userRouter);
 app.use(postRouter);
 app.use(followRouter);
-app.use(commentRouter);
+// app.use(commentRouter);
 
 app.get("/", (req, res) => res.send("Hi there"));
 
