@@ -90,4 +90,10 @@ router.delete("/mainProfilePhoto", auth, userController.deleteMainProfilePhoto);
 
 router.delete("/coverImage", auth, userController.deleteCoverImage);
 
+router.delete(
+  "/oldProfilePhoto/:id",
+  auth,
+  userController.deleteOldProfilePhoto
+);
+
 module.exports = router;

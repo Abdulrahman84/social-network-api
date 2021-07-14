@@ -31,7 +31,7 @@ exports.login = async (req, res) => {
 
 exports.setProfilePhoto = async (req, res) => {
   try {
-    if (!req.file)
+    if (!req.file || req.validationError)
       return res.status(400).send({ error: "please upload a photo" });
 
     if (req.user.cl_profilePhoto_id) {
@@ -51,14 +51,13 @@ exports.setProfilePhoto = async (req, res) => {
     await req.user.save();
     res.send(req.user.deleteExtraInfo());
   } catch (e) {
-    console.log(e);
     res.send(e);
   }
 };
 
 exports.setCoverImage = async (req, res) => {
   try {
-    if (!req.file)
+    if (!req.file || req.validationError)
       return res.status(400).send({ error: "please upload a photo" });
 
     if (req.user.cl_coverImage_id)
@@ -147,7 +146,7 @@ exports.updatePersonalInfo = async (req, res) => {
       gender,
       birthDate,
     },
-    { new: true }
+    { omitUndefined: true, new: true }
   );
 
   res.send(user.deleteExtraInfo());
@@ -172,6 +171,22 @@ exports.deleteCoverImage = async (req, res) => {
     await cloudinary.uploader.destroy(req.user.cl_coverImage_id);
   req.user.coverImage = null;
   req.user.cl_coverImage_id = null;
+
+  await req.user.save();
+  res.send(req.user);
+};
+
+exports.deleteOldProfilePhoto = async (req, res) => {
+  const photoToDelete = req.user.previousProfilePhotos.find(
+    (photo) => photo._id.toString() === req.params.id.toString()
+  );
+  await cloudinary.uploader.destroy(photoToDelete.cl_profilePhoto_id);
+
+  req.user.previousProfilePhotos = req.user.previousProfilePhotos.filter(
+    (photo) => {
+      return photo._id.toString() !== req.params.id.toString();
+    }
+  );
 
   await req.user.save();
   res.send(req.user);

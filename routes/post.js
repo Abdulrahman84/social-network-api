@@ -22,6 +22,27 @@ router.post(
   postController.addPost
 );
 
+router.put(
+  "/updatePost/:id",
+  [
+    body("content", "invalid content")
+      .isAlphanumeric()
+      .optional({ nullable: true }),
+    body("location", "invalid location")
+      .isString()
+      .optional({ nullable: true }),
+  ],
+  auth,
+  postController.updatePost
+);
+
+router.put(
+  "/updatePostImage/:id",
+  auth,
+  upload.single("image"),
+  postController.updatePostImage
+);
+
 router.get("/allPosts", postController.getAllPosts);
 
 router.get("/myPosts", auth, postController.getMyPosts);
