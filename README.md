@@ -33,9 +33,16 @@ npm run dev (nodemon) (port 3000)
   - https://h-social-network.herokuapp.com/addPost
 
 <h4>PUT REQUESTS</h4>
-...
-...
-...
+
+- Update post content (content, location)
+  - https://h-social-network.herokuapp.com/updatePost/:postId
+
+- Update post image (image)
+  - https://h-social-network.herokuapp.com/updatePostImage/:postId
+
+- Update profile info -all are optional- (firstName, lastName, email, password, birthDate, gender, location, socialCondition, work, study, bio, religion)
+  - https://h-social-network.herokuapp.com/updatePost/:postId
+
 <h4>GET REQUESTS</h4>
 
 - Get your profile
@@ -54,6 +61,9 @@ npm run dev (nodemon) (port 3000)
 
 - Delete main profile photo
   - https://h-social-network.herokuapp.com/mainProfilePhoto
+
+- Delete previous profile photo
+  - https://h-social-network.herokuapp.com/oldProfilePhoto/:photoId
 
 - Delete cover image
   - https://h-social-network.herokuapp.com/coverImage
