@@ -32,6 +32,9 @@ npm run dev (nodemon) (port 3000)
 - Add a new post : required ( content ), optional ( image, location )
   - https://h-social-network.herokuapp.com/addPost
 
+- Follow or unfollow a user 
+  - https://h-social-network.herokuapp.com/follow/:userId
+
 <h4>PUT REQUESTS</h4>
 
 - Update post content (content, location)
@@ -56,6 +59,18 @@ npm run dev (nodemon) (port 3000)
 
 - Get a user's profile
   - https://h-social-network.herokuapp.com/profile/:userId
+
+- Get my followers 
+  - https://h-social-network.herokuapp.com/myFollowers
+
+- Get my followings
+  - https://h-social-network.herokuapp.com/myFollowings
+
+- Get a user followers
+  - https://h-social-network.herokuapp.com/userFollowers/:userId
+
+- Get a user followings
+  - https://h-social-network.herokuapp.com/userFollowings/:userId
 
 <h4>DELETE REQUESTS</h4>
 
