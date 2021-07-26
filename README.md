@@ -44,7 +44,7 @@ npm run dev (nodemon) (port 3000)
   - https://h-social-network.herokuapp.com/updatePostImage/:postId
 
 - Update profile info -all are optional- (firstName, lastName, email, password, birthDate, gender, location, socialCondition, work, study, bio, religion)
-  - https://h-social-network.herokuapp.com/updatePost/:postId
+  - https://h-social-network.herokuapp.com/profile
 
 <h4>GET REQUESTS</h4>
 
@@ -56,6 +56,9 @@ npm run dev (nodemon) (port 3000)
 
 - Get all posts
   - https://h-social-network.herokuapp.com/allPosts
+
+- Get your following posts
+  - https://h-social-network.herokuapp.com/followingPosts
 
 - Get a user's profile
   - https://h-social-network.herokuapp.com/profile/:userId
