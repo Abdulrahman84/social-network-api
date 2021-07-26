@@ -41,6 +41,10 @@ const userSchema = new mongoose.Schema({
     max: Date.now() - 10,
   },
   gender: String,
+  darkMode: {
+    type: Boolean,
+    defulat: false,
+  },
   followers: [
     {
       type: mongoose.Schema.Types.ObjectId,

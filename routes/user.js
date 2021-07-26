@@ -80,6 +80,20 @@ router.post(
   userController.addPersonalInfo
 );
 
+router.put(
+  "/changePassword",
+  [
+    body("newPassword", "password should be between 5 and 30 characters long")
+      .exists()
+      .isLength({ min: 5, max: 30 })
+      .trim(),
+  ],
+  auth,
+  userController.changePassword
+);
+
+router.post("/darkMode", auth, userController.changMode);
+
 router.get("/myProfile", auth, userController.getMyProfile);
 
 router.get("/profile/:id", userController.getProfile);

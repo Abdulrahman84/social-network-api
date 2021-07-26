@@ -1,6 +1,9 @@
 const { validationResult } = require("express-validator");
 const cloudinary = require("cloudinary").v2;
+const bcrypt = require("bcryptjs");
+
 const User = require("../models/User");
+const Post = require("../models/Post");
 
 exports.register = async (req, res) => {
   const errors = validationResult(req);
@@ -94,7 +97,7 @@ exports.addPersonalInfo = async (req, res) => {
         bio,
         religion,
       },
-      { new: true }
+      { omitUndefined: true, new: true }
     );
     res.send(user);
   } catch (e) {
@@ -103,15 +106,27 @@ exports.addPersonalInfo = async (req, res) => {
   }
 };
 
+exports.changMode = async (req, res) => {
+  const user = req.user;
+  user.darkMode = user.darkMode ? false : true;
+
+  await user.save();
+
+  res.send({ result: `dark mode ${user.darkMode}` });
+};
+
 exports.getMyProfile = async (req, res) => {
   const user = req.user;
-  res.send(user.deleteExtraInfo());
+  const posts = await Post.find({ author: user._id });
+  res.send({ user, posts });
 };
 
 exports.getProfile = async (req, res) => {
-  const user = await User.findById(req.params.id);
+  const id = req.params.id;
+  const user = await User.findById(id, "-password");
+  const posts = await Post.find({ author: id });
   if (!user) return res.status(404).send({ error: "no user found" });
-  res.send(user.deleteExtraInfo());
+  res.send({ user, posts });
 };
 
 exports.updatePersonalInfo = async (req, res) => {
@@ -150,6 +165,24 @@ exports.updatePersonalInfo = async (req, res) => {
   );
 
   res.send(user.deleteExtraInfo());
+};
+
+exports.changePassword = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty())
+    return res.status(400).send({ error: errors.array()[0].msg });
+
+  const user = req.user;
+  const password = req.body.password;
+
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch)
+    return res.send({
+      erorr: "the password you entered does not match old password",
+    });
+  user.password = req.body.newPassword;
+  await user.save();
+  res.send({ result: "password updated" });
 };
 
 exports.deleteMainProfilePhoto = async (req, res) => {
