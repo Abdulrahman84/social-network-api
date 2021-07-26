@@ -35,6 +35,9 @@ npm run dev (nodemon) (port 3000)
 - Follow or unfollow a user 
   - https://h-social-network.herokuapp.com/follow/:userId
 
+- Set or unset dark mode
+  - https://h-social-network.herokuapp.com/darkMode
+
 <h4>PUT REQUESTS</h4>
 
 - Update post content (content, location)
@@ -45,6 +48,10 @@ npm run dev (nodemon) (port 3000)
 
 - Update profile info -all are optional- (firstName, lastName, email, password, birthDate, gender, location, socialCondition, work, study, bio, religion)
   - https://h-social-network.herokuapp.com/profile
+
+- Change password (password, newPassword)
+  - https://h-social-network.herokuapp.com/changePassword
+
 
 <h4>GET REQUESTS</h4>
 
