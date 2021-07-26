@@ -56,7 +56,6 @@ exports.updatePost = async (req, res) => {
     { omitUndefined: true, new: true }
   );
   if (!post) return res.send({ error: "not allowed" });
-  console.log(post);
   res.send(post);
 };
 
@@ -94,6 +93,17 @@ exports.getMyPosts = async (req, res) => {
     .sort({ createdAt: -1 })
     .limit(parseInt(req.query.limit))
     .skip(parseInt(req.query.skip));
+  res.send(posts);
+};
+
+exports.getFollowingPosts = async (req, res) => {
+  const posts = await Post.find({ author: { $in: req.user.following } })
+    .sort({
+      createdAt: -1,
+    })
+    .limit(parseInt(req.query.limit))
+    .skip(parseInt(req.query.skip))
+    .populate("author", "firstName lastName profilePhoto");
   res.send(posts);
 };
 

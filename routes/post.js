@@ -10,9 +10,7 @@ const router = express.Router();
 router.post(
   "/addPost",
   [
-    body("content", "invalid content")
-      .isAlphanumeric()
-      .optional({ nullable: true }),
+    body("content", "invalid content").isString().optional({ nullable: true }),
     body("location", "invalid location")
       .isString()
       .optional({ nullable: true }),
@@ -25,9 +23,7 @@ router.post(
 router.put(
   "/updatePost/:id",
   [
-    body("content", "invalid content")
-      .isAlphanumeric()
-      .optional({ nullable: true }),
+    body("content", "invalid content").isString().optional({ nullable: true }),
     body("location", "invalid location")
       .isString()
       .optional({ nullable: true }),
@@ -46,6 +42,8 @@ router.put(
 router.get("/allPosts", postController.getAllPosts);
 
 router.get("/myPosts", auth, postController.getMyPosts);
+
+router.get("/followingPosts", auth, postController.getFollowingPosts);
 
 router.get("/singlePost/:id", postController.getSinglePost);
 
