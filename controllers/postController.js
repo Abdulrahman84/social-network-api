@@ -30,7 +30,9 @@ exports.addPost = async (req, res) => {
     });
 
     await post.save();
-    await post.populate("author", "firstName lastName -_id").execPopulate();
+    await post
+      .populate("author", "firstName lastName profilePhoto gender")
+      .execPopulate();
 
     res.send(post);
   } catch (e) {
@@ -81,7 +83,7 @@ exports.updatePostImage = async (req, res) => {
 
 exports.getAllPosts = async (req, res) => {
   const posts = await Post.find()
-    .populate("author", "firstName lastName -_id")
+    .populate("author", "firstName lastName profilePhoto gender")
     .sort({ createdAt: -1 })
     .limit(parseInt(req.query.limit))
     .skip(parseInt(req.query.skip));
@@ -103,7 +105,7 @@ exports.getFollowingPosts = async (req, res) => {
     })
     .limit(parseInt(req.query.limit))
     .skip(parseInt(req.query.skip))
-    .populate("author", "firstName lastName profilePhoto");
+    .populate("author", "firstName lastName profilePhoto gender work birthDate");
   res.send(posts);
 };
 
@@ -118,7 +120,7 @@ exports.getSinglePost = async (req, res) => {
       populate: {
         path: "user",
         model: "User",
-        select: "firstName lastName profilePhoto",
+        select: "firstName lastName profilePhoto gender",
       },
     })
     .execPopulate();

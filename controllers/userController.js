@@ -224,3 +224,29 @@ exports.deleteOldProfilePhoto = async (req, res) => {
   await req.user.save();
   res.send(req.user);
 };
+
+exports.deletePersonalInfo = async (req, res) => {
+  const {
+    location,
+    socialCondition,
+    work,
+    study,
+    bio,
+    religion,
+    gender,
+    birthDate,
+  } = req.body;
+
+  if (location == "") req.user.location = null;
+  if (socialCondition == "") req.user.socialCondition = null;
+  if (work == "") req.user.work = null;
+  if (study == "") req.user.study = null;
+  if (bio == "") req.user.bio = null;
+  if (religion == "") req.user.religion = null;
+  if (gender == "") req.user.gender = null;
+  if (birthDate == "") req.user.birthDate = null;
+
+  await req.user.save();
+
+  res.send({ result: "Deleted" });
+};

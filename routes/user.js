@@ -110,4 +110,6 @@ router.delete(
   userController.deleteOldProfilePhoto
 );
 
+router.delete("/personalInfo", auth, userController.deletePersonalInfo);
+
 module.exports = router;
