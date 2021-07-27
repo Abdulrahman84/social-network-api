@@ -48,7 +48,10 @@ exports.follow = async (req, res) => {
 
 exports.getMyFollowers = async (req, res) => {
   const followers = await req.user
-    .populate("followers", "firstName lastName profilePhoto gender")
+    .populate(
+      "followers",
+      "firstName lastName profilePhoto gender work birthDate"
+    )
     .execPopulate();
 
   res.send(followers);
@@ -56,7 +59,10 @@ exports.getMyFollowers = async (req, res) => {
 
 exports.getMyFollowings = async (req, res) => {
   const followings = await req.user
-    .populate("following", "firstName lastName profilePhoto gender")
+    .populate(
+      "following",
+      "firstName lastName profilePhoto gender work birthDate"
+    )
     .execPopulate();
 
   res.send(followings);
@@ -65,7 +71,7 @@ exports.getMyFollowings = async (req, res) => {
 exports.getUsersFollowers = async (req, res) => {
   const followers = await User.findById(req.params.id, "followers").populate(
     "followers",
-    "firstName lastName profilePhoto gender"
+    "firstName lastName profilePhoto gender work birthDate"
   );
 
   res.send(followers);
@@ -74,7 +80,7 @@ exports.getUsersFollowers = async (req, res) => {
 exports.getUsersFollowings = async (req, res) => {
   const followings = await User.findById(req.params.id, "following").populate(
     "following",
-    "firstName lastName profilePhoto gender"
+    "firstName lastName profilePhoto gender work birthDate"
   );
 
   res.send(followings);
