@@ -95,4 +95,7 @@ npm run dev (nodemon) (port 3000)
   
 - Delete a post
   - https://h-social-network.herokuapp.com/deletePost/:postId
+
+- Delete one or more personal information ( birthDate, gender, location, socialCondition, work, study, bio, religion ) 
+  - https://h-social-network.herokuapp.com/deletePersonalInfo
  
