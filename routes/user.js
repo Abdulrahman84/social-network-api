@@ -80,6 +80,38 @@ router.post(
   userController.addPersonalInfo
 );
 
+router.post("/darkMode", auth, userController.changMode);
+
+router.get("/myProfile", auth, userController.getMyProfile);
+
+router.get("/profile/:id", userController.getProfile);
+
+router.get("/suggestedUsers", auth, userController.suggestUsers);
+
+router.put(
+  "/profile",
+  [
+    body("location", "invalid location")
+      .isString()
+      .optional({ nullable: true }),
+    body("religion", "invalid religion")
+      .isString()
+      .optional({ nullable: true }),
+    body("study", "invalid study").isString().optional({ nullable: true }),
+    body("work", "invalid work").isString().optional({ nullable: true }),
+    body("bio", "invalid bio").isString().optional({ nullable: true }),
+    body("gender", "invalid gender").isString().optional({ nullable: true }),
+    body("birthDate", "invalid birthYear")
+      .isNumeric()
+      .optional({ nullable: true }),
+    body("socialCondition", "invalid social condition")
+      .isString()
+      .optional({ nullable: true }),
+  ],
+  auth,
+  userController.updatePersonalInfo
+);
+
 router.put(
   "/changePassword",
   [
@@ -91,14 +123,6 @@ router.put(
   auth,
   userController.changePassword
 );
-
-router.post("/darkMode", auth, userController.changMode);
-
-router.get("/myProfile", auth, userController.getMyProfile);
-
-router.get("/profile/:id", userController.getProfile);
-
-router.put("/profile", auth, userController.updatePersonalInfo);
 
 router.delete("/mainProfilePhoto", auth, userController.deleteMainProfilePhoto);
 

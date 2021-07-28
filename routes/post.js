@@ -47,6 +47,8 @@ router.get("/followingPosts", auth, postController.getFollowingPosts);
 
 router.get("/singlePost/:id", postController.getSinglePost);
 
+router.get("/allPhotos", auth, postController.getAllPhotos);
+
 router.delete("/deletePost/:id", auth, postController.deletePost);
 
 module.exports = router;

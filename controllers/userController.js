@@ -129,6 +129,23 @@ exports.getProfile = async (req, res) => {
   res.send({ user, posts });
 };
 
+exports.suggestUsers = async (req, res) => {
+  // const location = req.user.location;
+  // if (location) {
+  //   const users = await User.find({ location }, "-password");
+  //   console.log(users);
+  //   res.send(
+  //     users.filter((user) => user._id.toString() !== req.user._id.toString())
+  //   );
+  // } else {
+  const users = await User.find({}, "-password")
+    .sort({ createdAt: -1 })
+    .limit(parseInt(req.query.limit))
+    .skip(parseInt(req.query.skip));
+  res.send(users);
+  // }
+};
+
 exports.updatePersonalInfo = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty())

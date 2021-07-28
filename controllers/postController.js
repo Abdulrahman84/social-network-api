@@ -62,23 +62,31 @@ exports.updatePost = async (req, res) => {
 };
 
 exports.updatePostImage = async (req, res) => {
-  if (!req.file || req.validationError)
-    return res.status(400).send({ error: "please upload a photo" });
+  try {
+    if (!req.file || req.validationError)
+      return res.status(400).send({ error: "please upload a photo" });
 
-  const post = await Post.findOne({ _id: req.params.id, author: req.user._id });
+    const post = await Post.findOne({
+      _id: req.params.id,
+      author: req.user._id,
+    });
 
-  if (!post) return res.status(401).send({ error: "Not allowed" });
+    if (!post) return res.status(401).send({ error: "Not allowed" });
 
-  await cloudinary.uploader.destroy(post.cloudinary_id);
+    if (post.cloudinary_id)
+      await cloudinary.uploader.destroy(post.cloudinary_id);
 
-  const result = await cloudinary.uploader.upload(req.file.path, {
-    folder: "social-network",
-  });
-  post.image = result.secure_url;
-  post.cloudinary_id = result.public_id;
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "social-network",
+    });
+    post.image = result.secure_url;
+    post.cloudinary_id = result.public_id;
 
-  await post.save();
-  res.send(post);
+    await post.save();
+    res.send(post);
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 exports.getAllPosts = async (req, res) => {
@@ -105,7 +113,10 @@ exports.getFollowingPosts = async (req, res) => {
     })
     .limit(parseInt(req.query.limit))
     .skip(parseInt(req.query.skip))
-    .populate("author", "firstName lastName profilePhoto gender work birthDate");
+    .populate(
+      "author",
+      "firstName lastName profilePhoto gender work birthDate"
+    );
   res.send(posts);
 };
 
@@ -126,6 +137,18 @@ exports.getSinglePost = async (req, res) => {
     .execPopulate();
 
   res.send({ post, comments: post.comments });
+};
+
+exports.getAllPhotos = async (req, res) => {
+  const posts = await Post.find({ author: req.user._id });
+
+  const images = posts
+    .filter((post) => {
+      return post.image != null;
+    })
+    .map((image) => image.image);
+
+  res.send(images);
 };
 
 exports.deletePost = async (req, res) => {
