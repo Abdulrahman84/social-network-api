@@ -82,6 +82,12 @@ npm run dev (nodemon) (port 3000)
 - Get a user followings
   - https://h-social-network.herokuapp.com/userFollowings/:userId
 
+ Get all of your photos
+  - https://h-social-network.herokuapp.com/allPhotos
+
+ Get suggested users
+  - https://h-social-network.herokuapp.com/suggestedUsers
+
 <h4>DELETE REQUESTS</h4>
 
 - Delete main profile photo
