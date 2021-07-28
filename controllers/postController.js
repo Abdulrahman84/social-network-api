@@ -140,7 +140,10 @@ exports.getSinglePost = async (req, res) => {
 };
 
 exports.getAllPhotos = async (req, res) => {
-  const posts = await Post.find({ author: req.user._id });
+  const posts = await Post.find({ author: req.user._id })
+    .sort({ createdAt: -1 })
+    .limit(parseInt(req.query.limit))
+    .skip(parseInt(req.query.skip));
 
   const images = posts
     .filter((post) => {
