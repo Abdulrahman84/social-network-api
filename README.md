@@ -85,6 +85,9 @@ npm run dev (nodemon) (port 3000)
  Get all of your photos
   - https://h-social-network.herokuapp.com/allPhotos
 
+Get all of user's photos
+  - https://h-social-network.herokuapp.com/allUserPhotos
+
  Get suggested users
   - https://h-social-network.herokuapp.com/suggestedUsers
 
