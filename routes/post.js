@@ -49,6 +49,8 @@ router.get("/singlePost/:id", postController.getSinglePost);
 
 router.get("/allPhotos", auth, postController.getAllPhotos);
 
+router.get("/allUserPhotos/:id", auth, postController.getAllUserPhotos);
+
 router.delete("/deletePost/:id", auth, postController.deletePost);
 
 module.exports = router;

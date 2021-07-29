@@ -126,7 +126,7 @@ exports.getProfile = async (req, res) => {
   const user = await User.findById(id, "-password");
   const posts = await Post.find({ author: id });
   if (!user) return res.status(404).send({ error: "no user found" });
-  res.send({ user, posts });
+  res.send({ user, posts, darkMode: req.user.darkMode });
 };
 
 exports.suggestUsers = async (req, res) => {

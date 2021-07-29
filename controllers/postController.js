@@ -144,6 +144,24 @@ exports.getAllPhotos = async (req, res) => {
     .sort({ createdAt: -1 })
     .limit(parseInt(req.query.limit))
     .skip(parseInt(req.query.skip));
+  if (!posts) return res.status(404).send();
+
+  const images = posts
+    .filter((post) => {
+      return post.image != null;
+    })
+    .map((image) => image.image);
+
+  res.send(images);
+};
+
+exports.getAllUserPhotos = async (req, res) => {
+  const id = req.params.id;
+  const posts = await Post.find({ author: id })
+    .sort({ createdAt: -1 })
+    .limit(parseInt(req.query.limit))
+    .skip(parseInt(req.query.skip));
+  if (!posts) return res.status(404).send();
 
   const images = posts
     .filter((post) => {
