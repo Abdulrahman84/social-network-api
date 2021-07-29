@@ -84,7 +84,7 @@ router.post("/darkMode", auth, userController.changMode);
 
 router.get("/myProfile", auth, userController.getMyProfile);
 
-router.get("/profile/:id", userController.getProfile);
+router.get("/profile/:id", auth, userController.getProfile);
 
 router.get("/suggestedUsers", auth, userController.suggestUsers);
 
