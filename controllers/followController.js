@@ -47,41 +47,61 @@ exports.follow = async (req, res) => {
 };
 
 exports.getMyFollowers = async (req, res) => {
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+
   const followers = await req.user
-    .populate(
-      "followers",
-      "firstName lastName profilePhoto gender work birthDate"
-    )
+    .populate({
+      path: "followers",
+      model: "User",
+      select: "firstName lastName profilePhoto gender work birthDate",
+      options: { limit, skip },
+    })
     .execPopulate();
 
   res.send(followers);
 };
 
 exports.getMyFollowings = async (req, res) => {
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+
   const followings = await req.user
-    .populate(
-      "following",
-      "firstName lastName profilePhoto gender work birthDate"
-    )
+    .populate({
+      path: "following",
+      model: "User",
+      select: "firstName lastName profilePhoto gender work birthDate",
+      options: { limit, skip },
+    })
     .execPopulate();
 
   res.send(followings);
 };
 
 exports.getUsersFollowers = async (req, res) => {
-  const followers = await User.findById(req.params.id, "followers").populate(
-    "followers",
-    "firstName lastName profilePhoto gender work birthDate"
-  );
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+
+  const followers = await User.findById(req.params.id).populate({
+    path: "followers",
+    model: "User",
+    select: "firstName lastName profilePhoto gender work birthDate",
+    options: { limit, skip },
+  });
 
   res.send(followers);
 };
 
 exports.getUsersFollowings = async (req, res) => {
-  const followings = await User.findById(req.params.id, "following").populate(
-    "following",
-    "firstName lastName profilePhoto gender work birthDate"
-  );
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+
+  const followings = await User.findById(req.params.id).populate({
+    path: "following",
+    model: "User",
+    select: "firstName lastName profilePhoto gender work birthDate",
+    options: { limit, skip },
+  });
 
   res.send(followings);
 };
