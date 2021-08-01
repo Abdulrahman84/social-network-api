@@ -25,8 +25,11 @@ app.get("/", (req, res) => res.send("Hi There"));
 mongoose.connect(
   process.env.MONGODB_URI,
   { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false },
-  () => {
-    app.listen(port);
+  (err, res) => {
+    const server = app.listen(port);
+    const io = require("socket.io")(server);
+    app.set("socketIo", io);
     console.log("connected " + port);
+    console.log(err);
   }
 );
