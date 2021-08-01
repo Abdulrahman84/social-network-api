@@ -27,7 +27,11 @@ mongoose.connect(
   { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false },
   (err, res) => {
     const server = app.listen(port);
-    const io = require("socket.io")(server);
+    const io = require("socket.io")(server, {
+      cors: {
+        origin: "*",
+      },
+    });
     app.set("socketIo", io);
     console.log("connected " + port);
     console.log(err);

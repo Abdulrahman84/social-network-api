@@ -1,6 +1,5 @@
 const Comment = require("../models/Comment");
 const { validationResult } = require("express-validator");
-const { connection } = require("mongoose");
 
 exports.addComment = async (req, res) => {
   const errors = validationResult(req);
