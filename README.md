@@ -38,6 +38,9 @@ npm run dev (nodemon) (port 3000)
 - Set or unset dark mode
   - https://h-social-network.herokuapp.com/darkMode
 
+- Add comment on a post
+  - https://h-social-network.herokuapp.com/addComment/postId
+
 <h4>PUT REQUESTS</h4>
 
 - Update post content (content, location)
