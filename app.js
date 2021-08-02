@@ -1,4 +1,4 @@
-// require("dotenv").config();
+require("dotenv").config();
 // const express = require("express");
 // const mongoose = require("mongoose");
 // const cors = require("cors");
@@ -11,7 +11,7 @@
 // const commentRouter = require("./routes/comment");
 
 // const app = express();
-// const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
 // app.use(cors());
 // app.use(express.json());
@@ -45,4 +45,4 @@ io.on("connection", (socket) => {
   console.log("new WS");
   socket.emit("test", { welcome: "hello from server", name: "abdulrahman" });
 });
-httpServer.listen(3000);
+httpServer.listen(port);
