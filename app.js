@@ -12,7 +12,7 @@ const commentRouter = require("./controllers/commentController");
 const app = express();
 const port = process.env.PORT || 3000;
 const server = require("http").createServer(app);
-const options = { cors: { origin: "*" } };
+const options = { cors: true, origins: "*" };
 const io = require("socket.io")(server, options);
 require("./routes/comment")(io);
 
