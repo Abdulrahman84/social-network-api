@@ -7,13 +7,14 @@ const cors = require("cors");
 const userRouter = require("./routes/user");
 const postRouter = require("./routes/post");
 const followRouter = require("./routes/follow");
-const commentRouter = require("./routes/comment");
+const commentRouter = require("./controllers/commentController");
 
 const app = express();
 const port = process.env.PORT || 3000;
 const server = require("http").createServer(app);
 const options = { cors: { origin: "*" } };
 const io = require("socket.io")(server, options);
+require("./routes/comment")(io);
 
 app.use(cors());
 app.use(express.json());
@@ -39,16 +40,4 @@ mongoose.connect(
 io.on("connection", (socket) => {
   console.log("new WS");
   socket.emit("test", { welcome: "hello from server", name: "abdulrahman" });
-  socket.on("addComment", (data) => {
-    socket.emit("addComment", data);
-  });
 });
-
-// io.sockets.on("connection", function (socket) {
-//   console.log("client connect");
-//   socket.on("echo", function (data) {
-//     io.sockets.emit("message", data);
-//   });
-// });
-
-require("./routes/comment")(app, io);

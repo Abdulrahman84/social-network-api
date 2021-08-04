@@ -1,8 +1,9 @@
 const express = require("express");
-const { body } = require("express-validator");
+const { body, validationResult } = require("express-validator");
 
 const auth = require("../middleware/auth");
-const commentController = require("../controllers/commentController");
+const { addComment } = require("../controllers/commentController");
+const Comment = require("../models/Comment");
 
 const router = express.Router();
 
@@ -15,13 +16,16 @@ const router = express.Router();
 
 // module.exports = router;
 
-module.exports = (app, io) => {
-  app.post("/addComment", (req, res) => {
-    const comment = req.body.comment;
-
-    console.log("comment");
-
-    io.sockets.emit("comment", comment);
-    res.send({ result: "update sent with IO" });
+module.exports = (io) => {
+  io.on("connection", (socket) => {
+    socket.on("addComment", async (data) => {
+      const comment = new Comment({
+        comment: data.comment,
+      });
+      await comment.save();
+      socket.emit("comment", data);
+    });
   });
 };
+
+// make a function in another folder for saving the comment
