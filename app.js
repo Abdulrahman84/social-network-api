@@ -14,6 +14,7 @@ const port = process.env.PORT || 3000;
 const server = require("http").createServer(app);
 const options = { cors: true, origins: "*" };
 const io = require("socket.io")(server, options);
+server.listen(port);
 require("./routes/comment")(io);
 
 app.use(cors());
@@ -28,6 +29,11 @@ app.use(commentRouter);
 
 app.get("/", (req, res) => res.send("Hi There"));
 
+io.on("connection", (socket) => {
+  console.log("new WS");
+  socket.emit("test", { welcome: "hello from server", name: "abdulrahman" });
+});
+
 mongoose.connect(
   process.env.MONGODB_URI,
   { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false },
@@ -35,10 +41,3 @@ mongoose.connect(
     console.log("connected " + port);
   }
 );
-
-io.on("connection", (socket) => {
-  console.log("new WS");
-  socket.emit("test", { welcome: "hello from server", name: "abdulrahman" });
-});
-
-server.listen(port);
