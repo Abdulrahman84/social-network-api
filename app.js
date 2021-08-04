@@ -12,8 +12,8 @@ const commentRouter = require("./controllers/commentController");
 const app = express();
 const port = process.env.PORT || 3000;
 const server = require("http").createServer(app);
-const options = { cors: { origin: "*" } };
-const io = require("socket.io")(server);
+const options = { cors: { origin: "https://amritb.github.io" } };
+const io = require("socket.io")(server, options);
 require("./routes/comment")(io);
 
 // app.use(cors());
