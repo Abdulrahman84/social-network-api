@@ -16,7 +16,7 @@ const options = { cors: { origin: "https://amritb.github.io" } };
 const io = require("socket.io")(server, options);
 require("./routes/comment")(io);
 
-// app.use(cors());
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
