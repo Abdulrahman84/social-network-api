@@ -32,7 +32,6 @@ mongoose.connect(
   process.env.MONGODB_URI,
   { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false },
   (err, res) => {
-    server.listen(port);
     console.log("connected " + port);
   }
 );
@@ -41,3 +40,5 @@ io.on("connection", (socket) => {
   console.log("new WS");
   socket.emit("test", { welcome: "hello from server", name: "abdulrahman" });
 });
+
+server.listen(port);
