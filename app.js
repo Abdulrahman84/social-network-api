@@ -4,22 +4,35 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
-const app = express();
-const port = process.env.PORT || 3000;
-const server = require("http").createServer(app);
-const options = { cors: { origin: "*" } };
-const io = require("socket.io")(server, options);
-app.use(cors());
-require("./routes/comment")(io);
-
 const userRouter = require("./routes/user");
 const postRouter = require("./routes/post");
 const followRouter = require("./routes/follow");
 const commentRouter = require("./controllers/commentController");
 
+const app = express();
+const port = process.env.PORT || 3000;
+const server = require("http").createServer(app);
+const options = { cors: { origin: "*" } };
+const io = require("socket.io")(server, options);
+require("./routes/comment")(io);
+
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE");
+    res.status(200).json({});
+  }
+  next();
+});
 
 app.use(userRouter);
 app.use(postRouter);
