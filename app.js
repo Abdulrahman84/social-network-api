@@ -11,20 +11,12 @@ const commentRouter = require("./controllers/commentController");
 
 const app = express();
 const port = process.env.PORT || 3000;
-
 const server = require("http").createServer(app);
-const io = require("socket.io")(server, {
-  cors: { origin: "*", methods: ["GET, POST"] },
-});
-server.listen(port, () => {
-  io.on("connection", (socket) => {
-    console.log("new WS");
-    socket.emit("test", { welcome: "hello from server", name: "abdulrahman" });
-  });
-});
+const options = { cors: { origin: "*" } };
+const io = require("socket.io")(server, options);
 require("./routes/comment")(io);
 
-app.use(cors());
+// app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -36,6 +28,11 @@ app.use(commentRouter);
 
 app.get("/", (req, res) => res.send("Hi There"));
 
+io.on("connection", (socket) => {
+  console.log("new WS");
+  socket.emit("test", { welcome: "hello from server", name: "abdulrahman" });
+});
+
 mongoose.connect(
   process.env.MONGODB_URI,
   { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false },
@@ -43,3 +40,5 @@ mongoose.connect(
     console.log("connected " + port);
   }
 );
+
+server.listen(port);
