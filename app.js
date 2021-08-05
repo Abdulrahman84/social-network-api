@@ -30,10 +30,10 @@ app.use(express.static(path.join(__dirname, "public")));
 // });
 
 const port = process.env.PORT || 3000;
-const server = require("http").createServer(app);
-const options = { cors: { origin: "*" } };
-const io = require("socket.io")(server, options);
-require("./routes/comment")(io);
+// const server = require("http").createServer(app);
+// const options = { cors: { origin: "*" } };
+// const io = require("socket.io")(server, options);
+// require("./routes/comment")(io);
 
 app.use(userRouter);
 app.use(postRouter);
@@ -55,4 +55,4 @@ mongoose.connect(
   }
 );
 
-server.listen(port);
+app.listen(port);
