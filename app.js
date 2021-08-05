@@ -7,14 +7,15 @@ const cors = require("cors");
 const userRouter = require("./routes/user");
 const postRouter = require("./routes/post");
 const followRouter = require("./routes/follow");
-const commentRouter = require("./controllers/commentController");
+// const commentRouter = require("./controllers/commentController");
 
 const app = express();
+const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, "public")));
+// app.use(express.static(path.join(__dirname, "public")));
 
 // app.use((req, res, next) => {
 //   res.header("Access-Control-Allow-Origin", "*");
@@ -29,7 +30,6 @@ app.use(express.static(path.join(__dirname, "public")));
 //   next();
 // });
 
-const port = process.env.PORT || 3000;
 // const server = require("http").createServer(app);
 // const options = { cors: { origin: "*" } };
 // const io = require("socket.io")(server, options);
@@ -38,7 +38,7 @@ const port = process.env.PORT || 3000;
 app.use(userRouter);
 app.use(postRouter);
 app.use(followRouter);
-app.use(commentRouter);
+// app.use(commentRouter);
 
 app.get("/", (req, res) => res.send("Hi There"));
 
@@ -51,8 +51,7 @@ mongoose.connect(
   process.env.MONGODB_URI,
   { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false },
   (err, res) => {
+    app.listen(port);
     console.log("connected " + port);
   }
 );
-
-app.listen(port);
