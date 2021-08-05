@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 
 const port = process.env.PORT || 3000;
 const server = require("http").createServer(app);
-const options = { cors: { origin: "*" } };
+const options = { cors: { origin: "*" }, transport: ["websocket"] };
 const io = require("socket.io")(server, options);
 require("./routes/comment")(io);
 
