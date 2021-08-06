@@ -70,6 +70,9 @@ npm run dev (nodemon) (port 3000)
 - Get your following posts
   - https://h-social-network.herokuapp.com/followingPosts
 
+- Get a single post
+  - https://h-social-network.herokuapp.com/singlePost/postId
+
 - Get a user's profile
   - https://h-social-network.herokuapp.com/profile/:userId
 
