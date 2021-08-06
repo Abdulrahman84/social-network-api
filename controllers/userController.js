@@ -115,6 +115,11 @@ exports.changMode = async (req, res) => {
   res.send({ result: `dark mode ${user.darkMode}` });
 };
 
+exports.logout = (req, res) => {
+  req.user = "";
+  res.send({ result: "Logged out" });
+};
+
 exports.getMyProfile = async (req, res) => {
   const user = req.user;
   const posts = await Post.find({ author: user._id });
