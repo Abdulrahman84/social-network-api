@@ -43,11 +43,6 @@ io.use((socket, next) => {
   }
 });
 
-io.on("connection", (socket) => {
-  console.log("new WS");
-  socket.emit("test", { welcome: "hello from server", name: "abdulrahman" });
-});
-
 mongoose.connect(
   process.env.MONGODB_URI,
   { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false },
