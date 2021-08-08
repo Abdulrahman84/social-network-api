@@ -107,7 +107,9 @@ exports.getMyPosts = async (req, res) => {
 };
 
 exports.getFollowingPosts = async (req, res) => {
-  const posts = await Post.find({ author: { $in: req.user.following } })
+  const posts = await Post.find({
+    $or: [{ author: { $in: req.user.following } }, { author: req.user._id }],
+  })
     .sort({
       createdAt: -1,
     })
@@ -131,7 +133,7 @@ exports.getSinglePost = async (req, res) => {
       populate: {
         path: "user",
         model: "User",
-        select: "firstName lastName profilePhoto gender",
+        select: "firstName lastName profilePhoto gender work birthDate",
       },
     })
     .execPopulate();

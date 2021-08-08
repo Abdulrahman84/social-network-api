@@ -43,7 +43,7 @@ exports.follow = async (req, res) => {
     },
   ]);
 
-  res.send(followsCounts);
+  res.send({ followsCounts, follow: alreadyFollow });
 };
 
 exports.getMyFollowers = async (req, res) => {
@@ -75,7 +75,7 @@ exports.getMyFollowings = async (req, res) => {
     })
     .execPopulate();
 
-  res.send(followings);
+  res.send({ followings, follow: true });
 };
 
 exports.getUsersFollowers = async (req, res) => {

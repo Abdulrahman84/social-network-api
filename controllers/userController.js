@@ -130,8 +130,11 @@ exports.getProfile = async (req, res) => {
   const id = req.params.id;
   const user = await User.findById(id, "-password");
   const posts = await Post.find({ author: id });
+
+  const follow = user.followers.includes(req.user._id) ? true : false;
+
   if (!user) return res.status(404).send({ error: "no user found" });
-  res.send({ user, posts, darkMode: req.user.darkMode });
+  res.send({ user, posts, darkMode: req.user.darkMode, follow });
 };
 
 exports.suggestUsers = async (req, res) => {
@@ -143,7 +146,10 @@ exports.suggestUsers = async (req, res) => {
   //     users.filter((user) => user._id.toString() !== req.user._id.toString())
   //   );
   // } else {
-  const users = await User.find({}, "-password")
+  const users = await User.find(
+    { _id: { $nin: req.user.following, $nin: req.user._id } },
+    "-password"
+  )
     .sort({ createdAt: -1 })
     .limit(parseInt(req.query.limit))
     .skip(parseInt(req.query.skip));

@@ -4,9 +4,15 @@ const User = require("../models/User");
 const onlineUsers = [];
 
 module.exports = (io) => {
-  io.on("connection", (socket) => {
+  io.on("connection", async (socket) => {
     console.log("new WS");
-    onlineUsers.push(socket.id);
+
+    const user = await User.findById(
+      socket.decoded._id,
+      "firstName lastName profilePhoto gender work birthDate"
+    );
+
+    onlineUsers.push({ socket: socket.id, _id: user._id });
     socket.emit("onlineUsers", onlineUsers);
 
     socket.on("addComment", async (data) => {
@@ -17,15 +23,29 @@ module.exports = (io) => {
       });
       await comment.save();
 
-      const user = await User.findById(
-        socket.decoded._id,
-        "firstName lastName profilePhoto"
-      );
+      const author = await comment
+        .populate({
+          path: "post",
+          model: "Post",
+          select: "author",
+        })
+        .execPopulate();
 
-      io.sockets.emit("comment", { user, comment });
-      socket.broadcast
-        .to(onlineUsers[1])
-        .emit("got", "you got a new comment on your post");
+      const authorId = author.post.author;
+      const isUserOnline = onlineUsers.some((user) => {
+        return user._id.toString() === authorId.toString();
+      });
+
+      if (!isUserOnline) {
+        console.log("offline");
+      } else {
+        const userNotif = onlineUsers.find(
+          (user) => user._id.toString() === authorId.toString()
+        );
+
+        io.sockets.emit("comment", { user, comment });
+        io.to(userNotif.socket).emit("notification", { user, comment });
+      }
     });
 
     socket.on("disconnect", () => {
