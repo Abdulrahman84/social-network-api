@@ -1,11 +1,11 @@
-const Comment = require("../models/Comment");
+const Reaction = require("../models/Reaction");
 const User = require("../models/User");
 
 const onlineUsers = [];
 
 module.exports = (io) => {
   io.on("connection", async (socket) => {
-    console.log("new WS");
+    console.log(socket.id);
 
     const user = await User.findById(
       socket.decoded._id,
@@ -13,17 +13,24 @@ module.exports = (io) => {
     );
 
     onlineUsers.push({ socket: socket.id, _id: user._id });
-    socket.emit("onlineUsers", onlineUsers);
 
-    socket.on("addComment", async (data) => {
-      const comment = new Comment({
-        user: socket.decoded._id,
-        comment: data.comment,
+    let reaction;
+    socket.on("addReaction", async (data) => {
+      if (data.reaction === "like") reaction = "like";
+      if (data.reaction === "love") reaction = "love";
+      if (data.reaction === "haha") reaction = "haha";
+      if (data.reaction === "wow") reaction = "wow";
+      if (data.reaction === "sad") reaction = "sad";
+      if (data.reaction === "angry") reaction = "angry";
+
+      const react = new Reaction({
+        user: user._id,
+        reaction,
         post: data.postId,
       });
-      await comment.save();
+      await react.save();
 
-      const author = await comment
+      const author = await react
         .populate({
           path: "post",
           model: "Post",
@@ -31,7 +38,7 @@ module.exports = (io) => {
         })
         .execPopulate();
 
-      io.sockets.emit("comment", { user, comment });
+      io.sockets.emit("reaction", { user, react });
 
       const authorId = author.post.author;
       const isUserOnline = onlineUsers.some((user) => {
@@ -45,17 +52,10 @@ module.exports = (io) => {
           (user) => user._id.toString() === authorId.toString()
         );
 
-        if (userNotif._id.toString() === authorId.toString()) return;
+        if (userNotif._id.toString() === user._id.toString()) return;
 
-        io.to(userNotif.socket).emit("notification", { user, comment });
+        io.to(userNotif.socket).emit("reactionNotification", { user, react });
       }
-    });
-
-    socket.on("disconnect", () => {
-      const i = onlineUsers.indexOf(socket);
-      onlineUsers.splice(i, 1);
-      console.log("disconnected");
-      io.sockets.emit("newOnlineUsers", onlineUsers);
     });
   });
 };

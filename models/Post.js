@@ -24,4 +24,10 @@ postSchema.virtual("comments", {
   foreignField: "post",
 });
 
+postSchema.virtual("reactions", {
+  ref: "Reaction",
+  localField: "_id",
+  foreignField: "post",
+});
+
 module.exports = mongoose.model("Post", postSchema);
