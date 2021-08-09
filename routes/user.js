@@ -82,6 +82,8 @@ router.post(
 
 router.post("/darkMode", auth, userController.changMode);
 
+router.post("/logout", auth, userController.logout);
+
 router.get("/myProfile", auth, userController.getMyProfile);
 
 router.get("/profile/:id", auth, userController.getProfile);

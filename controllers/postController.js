@@ -115,10 +115,11 @@ exports.getFollowingPosts = async (req, res) => {
     })
     .limit(parseInt(req.query.limit))
     .skip(parseInt(req.query.skip))
-    .populate(
-      "author",
-      "firstName lastName profilePhoto gender work birthDate"
-    );
+    .populate({
+      path: "author",
+      model: "User",
+      select: "firstName lastName profilePhoto gender work birthDate",
+    });
   res.send(posts);
 };
 
@@ -138,7 +139,11 @@ exports.getSinglePost = async (req, res) => {
     })
     .execPopulate();
 
-  res.send({ post, comments: post.comments });
+  res.send({
+    post,
+    comments: post.comments,
+    numOfComments: post.comments.length,
+  });
 };
 
 exports.getAllPhotos = async (req, res) => {

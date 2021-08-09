@@ -31,6 +31,8 @@ module.exports = (io) => {
         })
         .execPopulate();
 
+      io.sockets.emit("comment", { user, comment });
+
       const authorId = author.post.author;
       const isUserOnline = onlineUsers.some((user) => {
         return user._id.toString() === authorId.toString();
@@ -43,7 +45,8 @@ module.exports = (io) => {
           (user) => user._id.toString() === authorId.toString()
         );
 
-        io.sockets.emit("comment", { user, comment });
+        if (userNotif._id.toString() === authorId.toString()) return;
+
         io.to(userNotif.socket).emit("notification", { user, comment });
       }
     });
