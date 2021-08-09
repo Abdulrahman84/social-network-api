@@ -27,7 +27,8 @@ mongoose
     const options = { cors: { origin: "*" } };
     const io = require("socket.io")(server, options);
 
-    require("./routes/comment")(io);
+    require("./real-time/comment")(io);
+    require("./real-time/reaction")(io);
 
     app.use(userRouter);
     app.use(postRouter);
