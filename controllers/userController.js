@@ -146,13 +146,15 @@ exports.suggestUsers = async (req, res) => {
   //     users.filter((user) => user._id.toString() !== req.user._id.toString())
   //   );
   // } else {
+  console.log(req.user.following);
   const users = await User.find(
-    { _id: { $nin: req.user.following, $nin: req.user._id } },
+    { _id: { $nin: req.user.following, $ne: req.user._id } },
     "-password"
   )
     .sort({ createdAt: -1 })
     .limit(parseInt(req.query.limit))
     .skip(parseInt(req.query.skip));
+  console.log(users.length);
   res.send(users);
   // }
 };
