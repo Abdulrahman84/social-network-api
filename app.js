@@ -29,7 +29,7 @@ mongoose
 
     io.on("connection", (socket) => {
       require("./real-time/comment")(io, socket);
-      require("./real-time/reaction")(io, socket);
+      // require("./real-time/reaction")(io, socket);
     });
 
     app.use(userRouter);

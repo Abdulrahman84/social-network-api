@@ -103,9 +103,6 @@ router.put(
     body("work", "invalid work").isString().optional({ nullable: true }),
     body("bio", "invalid bio").isString().optional({ nullable: true }),
     body("gender", "invalid gender").isString().optional({ nullable: true }),
-    body("birthDate", "invalid birthYear")
-      .isNumeric()
-      .optional({ nullable: true }),
     body("socialCondition", "invalid social condition")
       .isString()
       .optional({ nullable: true }),

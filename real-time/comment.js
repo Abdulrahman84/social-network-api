@@ -5,14 +5,14 @@ const onlineUsers = [];
 
 module.exports = async (io, socket) => {
   console.log("new WS");
+  socket.join(socket.decoded._id);
+
+  onlineUsers.push({ socketId: socket.id, _id: socket.decoded._id });
 
   const user = await User.findById(
     socket.decoded._id,
     "firstName lastName profilePhoto gender work birthDate"
   );
-
-  onlineUsers.push({ socket: socket.id, _id: user._id });
-  // socket.emit("onlineUsers", onlineUsers);
 
   socket.on("addComment", async (data) => {
     const comment = new Comment({
@@ -22,6 +22,7 @@ module.exports = async (io, socket) => {
     });
     await comment.save();
 
+    io.sockets.emit("comment", { user, comment });
     const author = await comment
       .populate({
         path: "post",
@@ -30,32 +31,35 @@ module.exports = async (io, socket) => {
       })
       .execPopulate();
 
-    io.sockets.emit("comment", { user, comment });
+    // const authorId = author.post.author;
+    // const isUserOnline = onlineUsers.find(
+    //   (user) => user._id.toString() === authorId.toString()
+    // );
 
-    const authorId = author.post.author;
-    const isUserOnline = onlineUsers.some((user) => {
-      return user._id.toString() === authorId.toString();
-    });
+    // const id = isUserOnline.socketId;
 
-    if (!isUserOnline) {
-      console.log("offline");
-    } else {
-      const userNotif = onlineUsers.find(
-        (user) => user._id.toString() === authorId.toString()
-      );
-
-      if (userNotif._id.toString() === user._id.toString()) return;
-
-      io.to(userNotif.socket).emit("notification", { user, comment });
-    }
+    // socket.on("notification", (room) => {
+    //   io.in(room).emit("notification", {
+    //     comment,
+    //     user,
+    //     msg: "only for you",
+    //   });
+    //   if (!isUserOnline) {
+    //     console.log("user is offline");
+    //   } else {
+    //     if (isUserOnline._id.toString() !== user._id.toString()) {
+    //     } else {
+    //       console.log("yourself");
+    //     }
+    //   }
+    // });
   });
-
   socket.on("disconnect", () => {
-    setTimeout(() => {
-      const i = onlineUsers.indexOf(socket);
-      onlineUsers.splice(i, 1);
-      console.log("disconnected");
-      io.sockets.emit("newOnlineUsers", onlineUsers);
-    }, 5000);
+    const index = onlineUsers.findIndex((user1) => user1._id === user._id);
+    if (index !== -1) {
+      onlineUsers.splice(index, 1);
+    }
+    // console.log("disconnected");
+    // io.sockets.emit("newOnlineUsers", onlineUsers);
   });
 };
