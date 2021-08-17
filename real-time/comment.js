@@ -22,7 +22,6 @@ module.exports = async (io, socket) => {
     });
     await comment.save();
 
-    io.sockets.emit("comment", { user, comment });
     const author = await comment
       .populate({
         path: "post",
@@ -30,6 +29,8 @@ module.exports = async (io, socket) => {
         select: "author",
       })
       .execPopulate();
+
+    io.sockets.emit("comment", { user, comment, author });
 
     // const authorId = author.post.author;
     // const isUserOnline = onlineUsers.find(
