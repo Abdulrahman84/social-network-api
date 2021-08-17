@@ -159,6 +159,18 @@ exports.suggestUsers = async (req, res) => {
   // }
 };
 
+exports.searchUsers = async (req, res) => {
+  const users = await User.find({
+    $text: { $search: req.query.userName },
+  }).sort({
+    createdAt: -1,
+  });
+
+  if (!users.length) return res.send({ msg: "No user matched your searach" });
+
+  res.send(users);
+};
+
 exports.updatePersonalInfo = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty())

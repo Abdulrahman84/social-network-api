@@ -90,6 +90,8 @@ router.get("/profile/:id", auth, userController.getProfile);
 
 router.get("/suggestedUsers", auth, userController.suggestUsers);
 
+router.get("/searchUsers", auth, userController.searchUsers);
+
 router.put(
   "/profile",
   [

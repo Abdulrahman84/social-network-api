@@ -30,7 +30,7 @@ module.exports = async (io, socket) => {
       })
       .execPopulate();
 
-    io.sockets.emit("comment", { user, comment, author });
+    io.sockets.emit("comment", { user, comment, author: author.post.author });
 
     // const authorId = author.post.author;
     // const isUserOnline = onlineUsers.find(
