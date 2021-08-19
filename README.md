@@ -55,7 +55,7 @@ npm run dev (nodemon) (port 3000)
 - Change password (password, newPassword)
   - https://h-social-network.herokuapp.com/changePassword
 
-- update a comment of yours (commentId, comment)
+- update a comment of yours (id, comment)
   - https://h-social-network.herokuapp.com/updateComment 
 
 
@@ -120,6 +120,6 @@ Get all of user's photos
 - Delete one or more personal information ( birthDate, gender, location, socialCondition, work, study, bio, religion ) 
   - https://h-social-network.herokuapp.com/deletePersonalInfo
 
-- Delete a comment of yours (commentId)
+- Delete a comment of yours (id)
   - https://h-social-network.herokuapp.com/deleteComment
  
