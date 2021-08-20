@@ -124,7 +124,11 @@ exports.getFollowingPosts = async (req, res) => {
 };
 
 exports.getSinglePost = async (req, res) => {
-  const post = await Post.findOne({ _id: req.params.id });
+  const post = await Post.findOne({ _id: req.params.id }).populate({
+    path: "author",
+    model: "User",
+    select: "firstName lastName profilePhoto gender work birthDate",
+  });
   await post
     .populate({
       path: "comments",
@@ -137,12 +141,35 @@ exports.getSinglePost = async (req, res) => {
         select: "firstName lastName profilePhoto gender work birthDate",
       },
     })
+    .populate({
+      path: "reactions",
+      model: "Reaction",
+      populate: {
+        path: "user",
+        model: "User",
+        select: "firstName lastName profilePhoto gender work birthDate",
+      },
+    })
     .execPopulate();
+
+  const likes = post.reactions.filter((doc) => doc.reaction === "like");
+  const loves = post.reactions.filter((doc) => doc.reaction === "love");
+  const hahas = post.reactions.filter((doc) => doc.reaction === "haha");
+  const sads = post.reactions.filter((doc) => doc.reaction === "sad");
+  const angrys = post.reactions.filter((doc) => doc.reaction === "angry");
+  const wows = post.reactions.filter((doc) => doc.reaction === "wow");
 
   res.send({
     post,
     comments: post.comments,
+    reactions: post.reactions,
     numOfComments: post.comments.length,
+    numOfLikes: likes.length,
+    numOfLoves: loves.length,
+    numOfHahas: hahas.length,
+    numOfSads: sads.length,
+    numOfWows: wows.length,
+    numOfAngrys: angrys.length,
   });
 };
 

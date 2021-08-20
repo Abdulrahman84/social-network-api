@@ -8,6 +8,7 @@ const userRouter = require("./routes/user");
 const postRouter = require("./routes/post");
 const followRouter = require("./routes/follow");
 const commentRouter = require("./routes/comment");
+const notificationRouter = require("./routes/notification");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -30,13 +31,14 @@ mongoose
 
     io.on("connection", (socket) => {
       require("./real-time/comment")(io, socket);
-      // require("./real-time/reaction")(io, socket);
+      require("./real-time/reaction")(io, socket);
     });
 
     app.use(userRouter);
     app.use(postRouter);
     app.use(followRouter);
     app.use(commentRouter);
+    app.use(notificationRouter);
 
     app.get("/", (req, res) => res.send("Hi There"));
 

@@ -1,17 +1,12 @@
-const Reaction = require("../models/Reaction");
+const Notification = require("../models/Notification");
 const User = require("../models/User");
-
-const onlineUsers = [];
+const Reaction = require("../models/Reaction");
 
 module.exports = async (io, socket) => {
-  console.log(socket.id);
-
   const user = await User.findById(
     socket.decoded._id,
     "firstName lastName profilePhoto gender work birthDate"
   );
-
-  onlineUsers.push({ socket: socket.id, _id: user._id });
 
   let reaction;
   socket.on("addReaction", async (data) => {
@@ -37,23 +32,20 @@ module.exports = async (io, socket) => {
       })
       .execPopulate();
 
-    io.sockets.emit("reaction", { user, react });
+    io.sockets.emit("reaction", { user, react, author: author.post.author });
 
-    const authorId = author.post.author;
-    const isUserOnline = onlineUsers.some((user) => {
-      return user._id.toString() === authorId.toString();
+    const notification = new Notification({
+      receiver: author.post.author,
+      sender: user._id,
+      post: data.postId,
+      type: "reaction",
     });
+    await notification.save();
+  });
 
-    if (!isUserOnline) {
-      console.log("offline");
-    } else {
-      const userNotif = onlineUsers.find(
-        (user) => user._id.toString() === authorId.toString()
-      );
-
-      if (userNotif._id.toString() === user._id.toString()) return;
-
-      io.to(userNotif.socket).emit("reactionNotification", { user, react });
-    }
+  socket.on("opened", async (data) => {
+    await Notification.findByIdAndUpdate(data.id, {
+      opened: true,
+    });
   });
 };

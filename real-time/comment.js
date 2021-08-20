@@ -1,13 +1,14 @@
 const Comment = require("../models/Comment");
+const Notification = require("../models/Notification");
 const User = require("../models/User");
 
 const onlineUsers = [];
 
 module.exports = async (io, socket) => {
   console.log("new WS");
-  socket.join(socket.decoded._id);
 
   onlineUsers.push({ socketId: socket.id, _id: socket.decoded._id });
+  socket.emit("onlineUsers", onlineUsers);
 
   const user = await User.findById(
     socket.decoded._id,
@@ -32,35 +33,31 @@ module.exports = async (io, socket) => {
 
     io.sockets.emit("comment", { user, comment, author: author.post.author });
 
-    // const authorId = author.post.author;
-    // const isUserOnline = onlineUsers.find(
-    //   (user) => user._id.toString() === authorId.toString()
-    // );
-
-    // const id = isUserOnline.socketId;
-
-    // socket.on("notification", (room) => {
-    //   io.in(room).emit("notification", {
-    //     comment,
-    //     user,
-    //     msg: "only for you",
-    //   });
-    //   if (!isUserOnline) {
-    //     console.log("user is offline");
-    //   } else {
-    //     if (isUserOnline._id.toString() !== user._id.toString()) {
-    //     } else {
-    //       console.log("yourself");
-    //     }
-    //   }
-    // });
+    const notification = new Notification({
+      receiver: author.post.author,
+      sender: user._id,
+      post: data.postId,
+      type: "comment",
+    });
+    await notification.save();
   });
+
+  socket.on("opened", async (data) => {
+    await Notification.findByIdAndUpdate(data.id, {
+      opened: true,
+    });
+  });
+
   socket.on("disconnect", () => {
-    const index = onlineUsers.findIndex((user1) => user1._id === user._id);
-    if (index !== -1) {
-      onlineUsers.splice(index, 1);
-    }
-    // console.log("disconnected");
-    // io.sockets.emit("newOnlineUsers", onlineUsers);
+    setTimeout(() => {
+      const index = onlineUsers.findIndex((user1) => user1._id == user._id);
+
+      if (index !== -1) {
+        onlineUsers.splice(index, 1);
+        io.sockets.emit("newOnlineUsers", onlineUsers);
+      } else {
+        console.log("-1");
+      }
+    }, 1500);
   });
 };
