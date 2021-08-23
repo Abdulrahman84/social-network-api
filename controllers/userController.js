@@ -122,18 +122,103 @@ exports.logout = (req, res) => {
 
 exports.getMyProfile = async (req, res) => {
   const user = req.user;
-  const posts = await Post.find({ author: user._id });
+  const posts = await Post.aggregate([
+    {
+      $match: {
+        author: user._id,
+      },
+    },
+    { $sort: { createdAt: -1 } },
+    {
+      $lookup: {
+        from: "comments",
+        localField: "_id",
+        foreignField: "post",
+        as: "commentsCount",
+      },
+    },
+    {
+      $lookup: {
+        from: "reactions",
+        localField: "_id",
+        foreignField: "post",
+        as: "reactionsCount",
+      },
+    },
+    {
+      $addFields: {
+        numOfComments: { $size: "$commentsCount" },
+        numOfReactions: { $size: "$reactionsCount" },
+        myReaction: {
+          $filter: {
+            input: "$reactionsCount",
+            as: "reaction",
+            cond: { $eq: ["$$reaction.user", req.user._id] },
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        commentsCount: 0,
+        reactionsCount: 0,
+      },
+    },
+  ]);
   res.send({ user, posts });
 };
 
 exports.getProfile = async (req, res) => {
   const id = req.params.id;
   const user = await User.findById(id, "-password");
-  const posts = await Post.find({ author: id });
+  if (!user) return res.status(404).send({ error: "no user found" });
+
+  const posts = await Post.aggregate([
+    {
+      $match: {
+        author: user._id,
+      },
+    },
+    { $sort: { createdAt: -1 } },
+    {
+      $lookup: {
+        from: "comments",
+        localField: "_id",
+        foreignField: "post",
+        as: "commentsCount",
+      },
+    },
+    {
+      $lookup: {
+        from: "reactions",
+        localField: "_id",
+        foreignField: "post",
+        as: "reactionsCount",
+      },
+    },
+    {
+      $addFields: {
+        numOfComments: { $size: "$commentsCount" },
+        numOfReactions: { $size: "$reactionsCount" },
+        myReaction: {
+          $filter: {
+            input: "$reactionsCount",
+            as: "reaction",
+            cond: { $eq: ["$$reaction.user", req.user._id] },
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        commentsCount: 0,
+        reactionsCount: 0,
+      },
+    },
+  ]);
 
   const follow = user.followers.includes(req.user._id) ? true : false;
 
-  if (!user) return res.status(404).send({ error: "no user found" });
   res.send({ user, posts, darkMode: req.user.darkMode, follow });
 };
 

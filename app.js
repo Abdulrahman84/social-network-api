@@ -17,6 +17,12 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.use(userRouter);
+app.use(followRouter);
+app.use(commentRouter);
+app.use(notificationRouter);
+app.use(postRouter);
+
 mongoose
   .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
@@ -25,6 +31,7 @@ mongoose
   })
   .then(() => {
     console.log(`connected on ${port}`);
+
     const server = app.listen(port);
     const options = { cors: { origin: "*" } };
     const io = require("socket.io")(server, options);
@@ -33,12 +40,6 @@ mongoose
       require("./real-time/comment")(io, socket);
       require("./real-time/reaction")(io, socket);
     });
-
-    app.use(userRouter);
-    app.use(postRouter);
-    app.use(followRouter);
-    app.use(commentRouter);
-    app.use(notificationRouter);
 
     app.get("/", (req, res) => res.send("Hi There"));
 

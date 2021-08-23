@@ -107,19 +107,75 @@ exports.getMyPosts = async (req, res) => {
 };
 
 exports.getFollowingPosts = async (req, res) => {
-  const posts = await Post.find({
-    $or: [{ author: { $in: req.user.following } }, { author: req.user._id }],
-  })
-    .sort({
-      createdAt: -1,
-    })
-    .limit(parseInt(req.query.limit))
-    .skip(parseInt(req.query.skip))
-    .populate({
-      path: "author",
-      model: "User",
-      select: "firstName lastName profilePhoto gender work birthDate",
-    });
+  const posts = await Post.aggregate([
+    {
+      $match: {
+        $or: [
+          { author: { $in: req.user.following } },
+          { author: req.user._id },
+        ],
+      },
+    },
+    { $sort: { createdAt: -1 } },
+    { $skip: parseInt(req.query.skip) },
+    { $limit: parseInt(req.query.limit) },
+    {
+      $lookup: {
+        from: "users",
+        localField: "author",
+        foreignField: "_id",
+        as: "author",
+      },
+    },
+    {
+      $lookup: {
+        from: "reactions",
+        localField: "_id",
+        foreignField: "post",
+        as: "reactionsCount",
+      },
+    },
+    {
+      $lookup: {
+        from: "comments",
+        localField: "_id",
+        foreignField: "post",
+        as: "commentsCount",
+      },
+    },
+    {
+      $addFields: {
+        numOfComments: { $size: "$commentsCount" },
+        numOfReactions: { $size: "$reactionsCount" },
+        myReaction: {
+          $filter: {
+            input: "$reactionsCount",
+            as: "reaction",
+            cond: { $eq: ["$$reaction.user", req.user._id] },
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        content: 1,
+        image: 1,
+        location: 1,
+        createdAt: 1,
+        updatedAt: 1,
+        numOfReactions: 1,
+        numOfComments: 1,
+        myReaction: 1,
+        "author._id": 1,
+        "author.firstName": 1,
+        "author.lastName": 1,
+        "author.profilePhoto": 1,
+        "author.work": 1,
+        "author.gender": 1,
+        "author.birthDate": 1,
+      },
+    },
+  ]);
   res.send(posts);
 };
 
@@ -159,10 +215,15 @@ exports.getSinglePost = async (req, res) => {
   const angrys = post.reactions.filter((doc) => doc.reaction === "angry");
   const wows = post.reactions.filter((doc) => doc.reaction === "wow");
 
+  const myReaction = post.reactions.filter(
+    (doc) => doc.user._id.toString() === req.user._id.toString()
+  );
+
   res.send({
     post,
     comments: post.comments,
     reactions: post.reactions,
+    myReaction: myReaction[0].reaction,
     numOfComments: post.comments.length,
     numOfLikes: likes.length,
     numOfLoves: loves.length,

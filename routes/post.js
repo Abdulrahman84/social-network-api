@@ -45,7 +45,7 @@ router.get("/myPosts", auth, postController.getMyPosts);
 
 router.get("/followingPosts", auth, postController.getFollowingPosts);
 
-router.get("/singlePost/:id", postController.getSinglePost);
+router.get("/singlePost/:id", auth, postController.getSinglePost);
 
 router.get("/allPhotos", auth, postController.getAllPhotos);
 

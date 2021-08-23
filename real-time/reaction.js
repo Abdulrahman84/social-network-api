@@ -10,37 +10,46 @@ module.exports = async (io, socket) => {
 
   let reaction;
   socket.on("addReaction", async (data) => {
-    if (data.reaction === "like") reaction = "like";
-    if (data.reaction === "love") reaction = "love";
-    if (data.reaction === "haha") reaction = "haha";
-    if (data.reaction === "wow") reaction = "wow";
-    if (data.reaction === "sad") reaction = "sad";
-    if (data.reaction === "angry") reaction = "angry";
-
-    const react = new Reaction({
+    const alreadyReacted = await Reaction.find({
       user: user._id,
-      reaction,
       post: data.postId,
     });
-    await react.save();
+    if (alreadyReacted.length !== 0) {
+      await Reaction.findByIdAndDelete(alreadyReacted[0]._id);
+      socket.emit("reaction", "reaction removed");
+    } else {
+      if (data.reaction === "like") reaction = "like";
+      if (data.reaction === "love") reaction = "love";
+      if (data.reaction === "haha") reaction = "haha";
+      if (data.reaction === "wow") reaction = "wow";
+      if (data.reaction === "sad") reaction = "sad";
+      if (data.reaction === "angry") reaction = "angry";
 
-    const author = await react
-      .populate({
-        path: "post",
-        model: "Post",
-        select: "author",
-      })
-      .execPopulate();
+      const react = new Reaction({
+        user: user._id,
+        reaction,
+        post: data.postId,
+      });
+      await react.save();
 
-    io.sockets.emit("reaction", { user, react, author: author.post.author });
+      const author = await react
+        .populate({
+          path: "post",
+          model: "Post",
+          select: "author",
+        })
+        .execPopulate();
 
-    const notification = new Notification({
-      receiver: author.post.author,
-      sender: user._id,
-      post: data.postId,
-      type: "reaction",
-    });
-    await notification.save();
+      io.sockets.emit("reaction", { user, react, author: author.post.author });
+
+      const notification = new Notification({
+        receiver: author.post.author,
+        sender: user._id,
+        post: data.postId,
+        type: "reaction",
+      });
+      await notification.save();
+    }
   });
 
   socket.on("opened", async (data) => {
