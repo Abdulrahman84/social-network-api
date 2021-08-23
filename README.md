@@ -103,6 +103,9 @@ Get all of user's photos
 - Search in all users
   - https://h-social-network.herokuapp.com/searchUsers?userName=search
 
+- Get your notifications
+  - https://h-social-network.herokuapp.com/myNotification
+
 <h4>DELETE REQUESTS</h4>
 
 - Delete main profile photo
