@@ -117,8 +117,6 @@ exports.getFollowingPosts = async (req, res) => {
       },
     },
     { $sort: { createdAt: -1 } },
-    { $skip: parseInt(req.query.skip) },
-    { $limit: parseInt(req.query.limit) },
     {
       $lookup: {
         from: "users",
