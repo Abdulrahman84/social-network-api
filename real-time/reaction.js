@@ -14,10 +14,8 @@ module.exports = async (io, socket) => {
       user: user._id,
       post: data.postId,
     });
-    if (alreadyReacted.length !== 0) {
-      await Reaction.findByIdAndDelete(alreadyReacted[0]._id);
-      socket.emit("reaction", "reaction removed");
-    } else {
+
+    if (alreadyReacted.length === 0) {
       if (data.reaction === "like") reaction = "like";
       if (data.reaction === "love") reaction = "love";
       if (data.reaction === "haha") reaction = "haha";
@@ -49,6 +47,43 @@ module.exports = async (io, socket) => {
         type: "reaction",
       });
       await notification.save();
+    } else if (alreadyReacted[0].reaction !== data.reaction) {
+      await Reaction.findByIdAndDelete(alreadyReacted[0]._id);
+
+      if (data.reaction === "like") reaction = "like";
+      if (data.reaction === "love") reaction = "love";
+      if (data.reaction === "haha") reaction = "haha";
+      if (data.reaction === "wow") reaction = "wow";
+      if (data.reaction === "sad") reaction = "sad";
+      if (data.reaction === "angry") reaction = "angry";
+
+      const react = new Reaction({
+        user: user._id,
+        reaction,
+        post: data.postId,
+      });
+      await react.save();
+
+      const author = await react
+        .populate({
+          path: "post",
+          model: "Post",
+          select: "author",
+        })
+        .execPopulate();
+
+      io.sockets.emit("reaction", { user, react, author: author.post.author });
+
+      const notification = new Notification({
+        receiver: author.post.author,
+        sender: user._id,
+        post: data.postId,
+        type: "reaction",
+      });
+      await notification.save();
+    } else if (alreadyReacted.length !== 0) {
+      await Reaction.findByIdAndDelete(alreadyReacted[0]._id);
+      socket.emit("reaction", "reaction removed");
     }
   });
 
