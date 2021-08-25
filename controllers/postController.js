@@ -152,6 +152,48 @@ exports.getFollowingPosts = async (req, res) => {
             cond: { $eq: ["$$reaction.user", req.user._id] },
           },
         },
+        sadReactions: {
+          $filter: {
+            input: "$reactionsCount",
+            as: "reaction",
+            cond: { $eq: ["$$reaction.reaction", "sad"] },
+          },
+        },
+        hahaReactions: {
+          $filter: {
+            input: "$reactionsCount",
+            as: "reaction",
+            cond: { $eq: ["$$reaction.reaction", "haha"] },
+          },
+        },
+        loveReactions: {
+          $filter: {
+            input: "$reactionsCount",
+            as: "reaction",
+            cond: { $eq: ["$$reaction.reaction", "love"] },
+          },
+        },
+        likeReactions: {
+          $filter: {
+            input: "$reactionsCount",
+            as: "reaction",
+            cond: { $eq: ["$$reaction.reaction", "like"] },
+          },
+        },
+        angryReactions: {
+          $filter: {
+            input: "$reactionsCount",
+            as: "reaction",
+            cond: { $eq: ["$$reaction.reaction", "angry"] },
+          },
+        },
+        wowReactions: {
+          $filter: {
+            input: "$reactionsCount",
+            as: "reaction",
+            cond: { $eq: ["$$reaction.reaction", "wow"] },
+          },
+        },
       },
     },
     {
@@ -161,6 +203,24 @@ exports.getFollowingPosts = async (req, res) => {
         location: 1,
         createdAt: 1,
         updatedAt: 1,
+        like: {
+          $size: "$likeReactions",
+        },
+        love: {
+          $size: "$loveReactions",
+        },
+        wow: {
+          $size: "$wowReactions",
+        },
+        sad: {
+          $size: "$sadReactions",
+        },
+        haha: {
+          $size: "$hahaReactions",
+        },
+        angry: {
+          $size: "$angryReactions",
+        },
         numOfReactions: 1,
         numOfComments: 1,
         myReaction: 1,

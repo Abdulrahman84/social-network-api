@@ -156,12 +156,85 @@ exports.getMyProfile = async (req, res) => {
             cond: { $eq: ["$$reaction.user", req.user._id] },
           },
         },
+        sadReactions: {
+          $filter: {
+            input: "$reactionsCount",
+            as: "reaction",
+            cond: { $eq: ["$$reaction.reaction", "sad"] },
+          },
+        },
+        hahaReactions: {
+          $filter: {
+            input: "$reactionsCount",
+            as: "reaction",
+            cond: { $eq: ["$$reaction.reaction", "haha"] },
+          },
+        },
+        loveReactions: {
+          $filter: {
+            input: "$reactionsCount",
+            as: "reaction",
+            cond: { $eq: ["$$reaction.reaction", "love"] },
+          },
+        },
+        likeReactions: {
+          $filter: {
+            input: "$reactionsCount",
+            as: "reaction",
+            cond: { $eq: ["$$reaction.reaction", "like"] },
+          },
+        },
+        angryReactions: {
+          $filter: {
+            input: "$reactionsCount",
+            as: "reaction",
+            cond: { $eq: ["$$reaction.reaction", "angry"] },
+          },
+        },
+        wowReactions: {
+          $filter: {
+            input: "$reactionsCount",
+            as: "reaction",
+            cond: { $eq: ["$$reaction.reaction", "wow"] },
+          },
+        },
       },
     },
     {
       $project: {
-        commentsCount: 0,
-        reactionsCount: 0,
+        content: 1,
+        image: 1,
+        location: 1,
+        createdAt: 1,
+        updatedAt: 1,
+        like: {
+          $size: "$likeReactions",
+        },
+        love: {
+          $size: "$loveReactions",
+        },
+        wow: {
+          $size: "$wowReactions",
+        },
+        sad: {
+          $size: "$sadReactions",
+        },
+        haha: {
+          $size: "$hahaReactions",
+        },
+        angry: {
+          $size: "$angryReactions",
+        },
+        numOfReactions: 1,
+        numOfComments: 1,
+        myReaction: 1,
+        "author._id": 1,
+        "author.firstName": 1,
+        "author.lastName": 1,
+        "author.profilePhoto": 1,
+        "author.work": 1,
+        "author.gender": 1,
+        "author.birthDate": 1,
       },
     },
   ]);
@@ -207,12 +280,85 @@ exports.getProfile = async (req, res) => {
             cond: { $eq: ["$$reaction.user", req.user._id] },
           },
         },
+        sadReactions: {
+          $filter: {
+            input: "$reactionsCount",
+            as: "reaction",
+            cond: { $eq: ["$$reaction.reaction", "sad"] },
+          },
+        },
+        hahaReactions: {
+          $filter: {
+            input: "$reactionsCount",
+            as: "reaction",
+            cond: { $eq: ["$$reaction.reaction", "haha"] },
+          },
+        },
+        loveReactions: {
+          $filter: {
+            input: "$reactionsCount",
+            as: "reaction",
+            cond: { $eq: ["$$reaction.reaction", "love"] },
+          },
+        },
+        likeReactions: {
+          $filter: {
+            input: "$reactionsCount",
+            as: "reaction",
+            cond: { $eq: ["$$reaction.reaction", "like"] },
+          },
+        },
+        angryReactions: {
+          $filter: {
+            input: "$reactionsCount",
+            as: "reaction",
+            cond: { $eq: ["$$reaction.reaction", "angry"] },
+          },
+        },
+        wowReactions: {
+          $filter: {
+            input: "$reactionsCount",
+            as: "reaction",
+            cond: { $eq: ["$$reaction.reaction", "wow"] },
+          },
+        },
       },
     },
     {
       $project: {
-        commentsCount: 0,
-        reactionsCount: 0,
+        content: 1,
+        image: 1,
+        location: 1,
+        createdAt: 1,
+        updatedAt: 1,
+        like: {
+          $size: "$likeReactions",
+        },
+        love: {
+          $size: "$loveReactions",
+        },
+        wow: {
+          $size: "$wowReactions",
+        },
+        sad: {
+          $size: "$sadReactions",
+        },
+        haha: {
+          $size: "$hahaReactions",
+        },
+        angry: {
+          $size: "$angryReactions",
+        },
+        numOfReactions: 1,
+        numOfComments: 1,
+        myReaction: 1,
+        "author._id": 1,
+        "author.firstName": 1,
+        "author.lastName": 1,
+        "author.profilePhoto": 1,
+        "author.work": 1,
+        "author.gender": 1,
+        "author.birthDate": 1,
       },
     },
   ]);
