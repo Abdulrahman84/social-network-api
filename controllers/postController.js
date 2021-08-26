@@ -283,6 +283,7 @@ exports.getSinglePost = async (req, res) => {
     reactions: post.reactions,
     myReaction,
     numOfComments: post.comments.length,
+    numOfReactions: post.reactions.length,
     numOfLikes: likes.length,
     numOfLoves: loves.length,
     numOfHahas: hahas.length,
