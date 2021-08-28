@@ -44,7 +44,7 @@ module.exports = async (io, socket) => {
         receiver: author.post.author,
         sender: user._id,
         post: data.postId,
-        type: "reaction",
+        type: react.reaction,
       });
       await notification.save();
     } else if (alreadyReacted[0].reaction !== data.reaction) {
@@ -78,7 +78,7 @@ module.exports = async (io, socket) => {
         receiver: author.post.author,
         sender: user._id,
         post: data.postId,
-        type: "reaction",
+        type: react.reaction,
       });
       await notification.save();
     } else if (alreadyReacted.length !== 0) {
