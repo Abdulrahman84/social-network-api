@@ -38,8 +38,6 @@ module.exports = async (io, socket) => {
         })
         .execPopulate();
 
-      io.sockets.emit("reaction", { user, react, author: author.post.author });
-
       const notification = new Notification({
         receiver: author.post.author,
         sender: user._id,
@@ -47,6 +45,13 @@ module.exports = async (io, socket) => {
         type: react.reaction,
       });
       await notification.save();
+
+      io.sockets.emit("reaction", {
+        user,
+        react,
+        author: author.post.author,
+        notificationId: notification._id,
+      });
     } else if (alreadyReacted[0].reaction !== data.reaction) {
       await Reaction.findByIdAndDelete(alreadyReacted[0]._id);
 

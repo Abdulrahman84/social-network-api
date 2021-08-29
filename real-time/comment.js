@@ -31,8 +31,6 @@ module.exports = async (io, socket) => {
       })
       .execPopulate();
 
-    io.sockets.emit("comment", { user, comment, author: author.post.author });
-
     const notification = new Notification({
       receiver: author.post.author,
       sender: user._id,
@@ -40,6 +38,13 @@ module.exports = async (io, socket) => {
       type: "comment",
     });
     await notification.save();
+
+    io.sockets.emit("comment", {
+      user,
+      comment,
+      author: author.post.author,
+      notificationId: notification._id,
+    });
   });
 
   socket.on("opened", async (data) => {
