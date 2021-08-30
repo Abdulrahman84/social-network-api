@@ -91,13 +91,13 @@ npm run dev (nodemon) (port 3000)
 - Get a user followings
   - https://h-social-network.herokuapp.com/userFollowings/:userId
 
- Get all of your photos
+- Get all of your photos
   - https://h-social-network.herokuapp.com/allPhotos
 
-Get all of user's photos
+- Get all of user's photos
   - https://h-social-network.herokuapp.com/allUserPhotos
 
- Get suggested users
+- Get suggested users
   - https://h-social-network.herokuapp.com/suggestedUsers
 
 - Search in all users
