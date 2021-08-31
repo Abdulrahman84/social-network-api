@@ -1,8 +1,10 @@
 <h2>Social Network API</h2>
 
-Social network api built using Node.js, Express and MongoDB(Mongoose).
+Social Network API Built Using Node.js, Express and MongoDB(Mongoose).
 
 <h2>installation and running locally</h2>
+
+- You must creat .env file for Database URI, JWT secert key and Cloudinary API keys
 
 npm install
 
