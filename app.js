@@ -36,12 +36,6 @@ mongoose
     app.use(notificationRouter);
     app.use(postRouter);
 
-    io.on("connection", (socket) => {
-      require("./real-time/comment")(io, socket);
-      require("./real-time/reaction")(io, socket);
-      require("./real-time/follow")(io, socket);
-    });
-
     app.get("/", (req, res) => res.send("Hi There"));
 
     app.use("*", (req, res) => {
@@ -54,13 +48,19 @@ mongoose
           socket.handshake.query.token,
           process.env.JWT_SECRET,
           (err, decoded) => {
-            if (err) return next(new Error("Authentication error"));
+            if (err) return new Error("Authentication error");
             socket.decoded = decoded;
             next();
           }
         );
       } else {
-        next(new Error("Authentication error"));
+        return new Error("Authentication error");
       }
+    });
+
+    io.on("connection", (socket) => {
+      require("./real-time/comment")(io, socket);
+      require("./real-time/reaction")(io, socket);
+      require("./real-time/follow")(io, socket);
     });
   });
