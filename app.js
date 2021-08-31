@@ -24,7 +24,7 @@ mongoose
     useFindAndModify: false,
   })
   .then(() => {
-    console.log(`connected on ${port}`);
+    console.log(`connected on port: ${port}`);
 
     const server = app.listen(port);
     const options = { cors: { origin: "*" } };
