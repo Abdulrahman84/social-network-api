@@ -55,7 +55,7 @@ exports.getMyFollowers = async (req, res) => {
       path: "followers",
       model: "User",
       select: "firstName lastName profilePhoto gender work birthDate",
-      options: { limit, skip },
+      options: { limit, skip, sort: { firstName: 1 } },
     })
     .execPopulate();
 
@@ -71,7 +71,7 @@ exports.getMyFollowings = async (req, res) => {
       path: "following",
       model: "User",
       select: "firstName lastName profilePhoto gender work birthDate",
-      options: { limit, skip },
+      options: { limit, skip, sort: { firstName: 1 } },
     })
     .execPopulate();
 
@@ -86,7 +86,7 @@ exports.getUsersFollowers = async (req, res) => {
     path: "followers",
     model: "User",
     select: "firstName lastName profilePhoto gender work birthDate",
-    options: { limit, skip },
+    options: { limit, skip, sort: { firstName: 1 } },
   });
 
   res.send(followers);
@@ -100,7 +100,7 @@ exports.getUsersFollowings = async (req, res) => {
     path: "following",
     model: "User",
     select: "firstName lastName profilePhoto gender work birthDate",
-    options: { limit, skip },
+    options: { limit, skip, sort: { firstName: 1 } },
   });
 
   res.send(followings);

@@ -14,7 +14,11 @@ module.exports = async (io, socket) => {
       type: "follow",
     });
     await notification.save();
-    io.sockets.emit("follow", { user, id: data.id });
+    io.sockets.emit("follow", {
+      user,
+      id: data.id,
+      notificationId: notification._id,
+    });
   });
 
   socket.on("opened", async (data) => {
