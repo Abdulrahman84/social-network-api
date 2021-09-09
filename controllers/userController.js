@@ -7,15 +7,15 @@ const Post = require("../models/Post");
 
 exports.register = async (req, res) => {
   const errors = validationResult(req);
-  if (!errors.isEmpty())
-    return res.status(400).send({ error: errors.array()[0].msg });
+  if (!errors.isEmpty()) return res.status(400).send(errors.array()[0].msg);
   try {
     const user = new User(req.body);
     const token = user.generateAuthToken();
     await user.save();
     res.send({ token });
   } catch (e) {
-    res.status(400).send({ error: e.message });
+    const error = JSON.parse(e.message);
+    res.status(400).send(error);
   }
 };
 
@@ -28,7 +28,8 @@ exports.login = async (req, res) => {
     const token = user.generateAuthToken();
     res.send({ token });
   } catch (e) {
-    res.status(400).send({ error: e.message });
+    const error = JSON.parse(e.message);
+    res.status(400).send(error);
   }
 };
 

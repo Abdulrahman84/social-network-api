@@ -70,12 +70,26 @@ userSchema.methods.generateAuthToken = function () {
   return token;
 };
 
+const emailMessage = {
+  english: "No account found with this email",
+  arabic: "لم يتم العثور على حساب مع هذا البريد الإلكتروني",
+  turkish: "Bu e-posta ile hesap bulunamadı",
+  french: "Aucun compte trouvé avec cet email",
+  german: "Kein Konto mit dieser E-Mail gefunden",
+};
+const passwordMessage = {
+  english: "Invalid password",
+  arabic: "خطأ في كلمة المرور",
+  turkish: "Geçersiz şifre",
+  french: "Mot de passe incorrect",
+  german: "Ungültiges Passwort",
+};
 userSchema.statics.findByCredentials = async (email, password) => {
   const user = await User.findOne({ email });
-  if (!user) throw new Error("No account found with this email");
+  if (!user) throw new Error(JSON.stringify(emailMessage));
 
   const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) throw new Error("Invalid password");
+  if (!isMatch) throw new Error(JSON.stringify(passwordMessage));
   return user;
 };
 

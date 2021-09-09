@@ -8,27 +8,74 @@ const upload = require("../middleware/upload");
 
 const router = express.Router();
 
+const firstNameMessage = {
+  english: "invalid first name",
+  arabic: "الاسم الأول غير صالح",
+  turkish: "Geçersiz ilk ad",
+  french: "Prénom invalide",
+  german: "Ungültiger vorname",
+};
+const lastNameMessage = {
+  english: "Invalid last name",
+  arabic: "الاسم الأخير غير صالح",
+  turkish: "Geçersiz soyadı",
+  french: "Nom de famille invalide",
+  german: "Ungültiger nachname",
+};
+const emailMessageExist = {
+  english: "Email exists already, please pick a different one.",
+  arabic: "البريد الإلكتروني موجود بالفعل ، يرجى اختيار بريد آخر.",
+  turkish: "E-posta zaten var, lütfen farklı bir tane seçin.",
+  french: "L'e-mail existe déjà, veuillez en choisir un autre.",
+  german: "E-Mail existiert bereits, bitte wählen Sie eine andere aus.",
+};
+const emailMessage = {
+  english: "Invalid email",
+  arabic: "خطأ في البريد الإلكتروني",
+  turkish: "Geçersiz e-posta",
+  french: "Email invalide",
+  german: "Ungültige E-Mail",
+};
+const passwordMessage = {
+  english: "Password should be between 5 and 30 characters long",
+  arabic: "يجب أن يتراوح طول كلمة المرور بين ٥ و ۳۰ حرف",
+  turkish: "şifre 5 ila 30 karakter uzunluğunda olmalıdır",
+  french: "Le mot de passe doit contenir entre 5 et 30 caractères",
+  german: "Passwort sollte zwischen 5 und 30 Zeichen lang sein",
+};
+const birthDateMessage = {
+  english: "Invalid birth date",
+  arabic: "خطأ في تاريخ الميلاد",
+  turkish: "Geçersiz doğum tarihi",
+  french: "Date de naissance invalide",
+  german: "Ungültiges geburtsdatum",
+};
+const genderMessage = {
+  english: "invalid gender",
+  arabic: "خطأ في الجنس",
+  turkish: "Geçersiz cinsiyet",
+  french: "Genre incompatible",
+  german: "Ungültiges Geschlecht",
+};
+
 router.post(
   "/register",
   [
-    body("firstName", "invalid first name").exists().isAlphanumeric(),
-    body("lastName", "invalid last name ").exists().isAlphanumeric(),
-    check("email", "invalid email")
+    body("firstName", firstNameMessage).exists().isAlphanumeric(),
+    body("lastName", lastNameMessage).exists().isAlphanumeric(),
+    check("email", emailMessage)
       .normalizeEmail()
       .isEmail()
       .custom(async (value) => {
         const user = await User.findOne({ email: value });
-        if (user)
-          return Promise.reject(
-            "Email exists already, please pick a different one."
-          );
+        if (user) return Promise.reject(emailMessageExist);
       }),
-    body("password", "password should be between 5 and 30 characters long")
+    body("password", passwordMessage)
       .exists()
       .isLength({ min: 5, max: 30 })
       .trim(),
-    body("birthDate", "invalid birth date").exists().isDate(),
-    body("gender", "invalid gender").exists().isString(),
+    body("birthDate", birthDateMessage).exists().isDate(),
+    body("gender", genderMessage).exists().isString(),
   ],
   userController.register
 );
@@ -36,8 +83,8 @@ router.post(
 router.post(
   "/login",
   [
-    body("email").isEmail().withMessage("invalid email").normalizeEmail(),
-    body("password", "invalid password").isLength({ min: 5, max: 30 }).trim(),
+    body("email").isEmail().withMessage({ emailMessage }).normalizeEmail(),
+    body("password", passwordMessage).isLength({ min: 5, max: 30 }).trim(),
   ],
   userController.login
 );
