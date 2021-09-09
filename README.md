@@ -2,6 +2,9 @@
 
 Social Network API Built Using Node.js, Express and MongoDB(Mongoose).
 
+API:  https://h-social-network.herokuapp.com <br>
+Live: https://mohhamedhassan.github.io/fakebook/auth/signin
+
 <h2>installation and running locally</h2>
 
 - You must creat .env file for Database URI, JWT secert key and Cloudinary API keys
