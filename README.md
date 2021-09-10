@@ -18,12 +18,6 @@ npm run dev (nodemon) (port 3000)
 <h2>Endpoints</h2>
 
 <h4>POST REQUESTS</h4>
-<h4>GET REQUESTS</h4>
-<h4>PUT REQUESTS</h4>
-<h4>DELETE REQUESTS</h4>
-
-
-<h4>POST REQUESTS</h4>
 
 - Register for a new account (firstName, lastName, email, password, birthDate, gender)
   - https://h-social-network.herokuapp.com/register
