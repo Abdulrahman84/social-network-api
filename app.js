@@ -17,7 +17,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-mongoose
+module.exports = mongoose
   .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -64,3 +64,4 @@ mongoose
       require("./real-time/follow")(io, socket);
     });
   });
+
