@@ -20,114 +20,114 @@ npm run dev (nodemon) (port 3000)
 <h4>POST REQUESTS</h4>
 
 - Register for a new account (firstName, lastName, email, password, birthDate, gender)
-  - https://h-social-network.herokuapp.com/register
+  - https://social-network.onrender.com/register
 
 - Login (email, password)
-  - https://h-social-network.herokuapp.com/login
+  - https://social-network.onrender.com/login
 
 - Set/update profile photo (profilePhoto)
-  - https://h-social-network.herokuapp.com/profilePhoto
+  - https://social-network.onrender.com/profilePhoto
  
 - Set/update cover image (coverImage)
-  - https://h-social-network.herokuapp.com/coverImage
+  - https://social-network.onrender.com/coverImage
 
 - Add personal information: all fields are optional (location, socialCondition, work, study, bio, religion)
-  - https://h-social-network.herokuapp.com/personalInfo
+  - https://social-network.onrender.com/personalInfo
 
 - Add a new post : required ( content ), optional ( image, location )
-  - https://h-social-network.herokuapp.com/addPost
+  - https://social-network.onrender.com/addPost
 
 - Follow or unfollow a user 
-  - https://h-social-network.herokuapp.com/follow/:userId
+  - https://social-network.onrender.com/follow/:userId
 
 - Set or unset dark mode
-  - https://h-social-network.herokuapp.com/darkMode
+  - https://social-network.onrender.com/darkMode
 
 - Add comment on a post ( comment )
-  - https://h-social-network.herokuapp.com/addComment/postId
+  - https://social-network.onrender.com/addComment/postId
 
 <h4>PUT REQUESTS</h4>
 
 - Update post content (content, location)
-  - https://h-social-network.herokuapp.com/updatePost/:postId
+  - https://social-network.onrender.com/updatePost/:postId
 
 - Update post image (image)
-  - https://h-social-network.herokuapp.com/updatePostImage/:postId
+  - https://social-network.onrender.com/updatePostImage/:postId
 
 - Update profile info -all are optional- (firstName, lastName, email, password, birthDate, gender, location, socialCondition, work, study, bio, religion)
-  - https://h-social-network.herokuapp.com/profile
+  - https://social-network.onrender.com/profile
 
 - Change password (password, newPassword)
-  - https://h-social-network.herokuapp.com/changePassword
+  - https://social-network.onrender.com/changePassword
 
 - update a comment of yours (id, comment)
-  - https://h-social-network.herokuapp.com/updateComment 
+  - https://social-network.onrender.com/updateComment 
 
 
 <h4>GET REQUESTS</h4>
 
 - Get your profile
-  - https://h-social-network.herokuapp.com/myProfile
+  - https://social-network.onrender.com/myProfile
 
 - Get your posts
-  - https://h-social-network.herokuapp.com/myPosts
+  - https://social-network.onrender.com/myPosts
 
 - Get all posts
-  - https://h-social-network.herokuapp.com/allPosts
+  - https://social-network.onrender.com/allPosts
 
 - Get your following posts
-  - https://h-social-network.herokuapp.com/followingPosts
+  - https://social-network.onrender.com/followingPosts
 
 - Get a single post
-  - https://h-social-network.herokuapp.com/singlePost/postId
+  - https://social-network.onrender.com/singlePost/postId
 
 - Get a user's profile
-  - https://h-social-network.herokuapp.com/profile/:userId
+  - https://social-network.onrender.com/profile/:userId
 
 - Get my followers 
-  - https://h-social-network.herokuapp.com/myFollowers
+  - https://social-network.onrender.com/myFollowers
 
 - Get my followings
-  - https://h-social-network.herokuapp.com/myFollowings
+  - https://social-network.onrender.com/myFollowings
 
 - Get a user followers
-  - https://h-social-network.herokuapp.com/userFollowers/:userId
+  - https://social-network.onrender.com/userFollowers/:userId
 
 - Get a user followings
-  - https://h-social-network.herokuapp.com/userFollowings/:userId
+  - https://social-network.onrender.com/userFollowings/:userId
 
 - Get all of your photos
-  - https://h-social-network.herokuapp.com/allPhotos
+  - https://social-network.onrender.com/allPhotos
 
 - Get all of user's photos
-  - https://h-social-network.herokuapp.com/allUserPhotos
+  - https://social-network.onrender.com/allUserPhotos
 
 - Get suggested users
-  - https://h-social-network.herokuapp.com/suggestedUsers
+  - https://social-network.onrender.com/suggestedUsers
 
 - Search in all users
-  - https://h-social-network.herokuapp.com/searchUsers?userName=search
+  - https://social-network.onrender.com/searchUsers?userName=search
 
 - Get your notifications
-  - https://h-social-network.herokuapp.com/myNotification
+  - https://social-network.onrender.com/myNotification
 
 <h4>DELETE REQUESTS</h4>
 
 - Delete main profile photo
-  - https://h-social-network.herokuapp.com/mainProfilePhoto
+  - https://social-network.onrender.com/mainProfilePhoto
 
 - Delete previous profile photo
-  - https://h-social-network.herokuapp.com/oldProfilePhoto/:photoId
+  - https://social-network.onrender.com/oldProfilePhoto/:photoId
 
 - Delete cover image
-  - https://h-social-network.herokuapp.com/coverImage
+  - https://social-network.onrender.com/coverImage
   
 - Delete a post
-  - https://h-social-network.herokuapp.com/deletePost/:postId
+  - https://social-network.onrender.com/deletePost/:postId
 
 - Delete one or more personal information ( birthDate, gender, location, socialCondition, work, study, bio, religion ) 
-  - https://h-social-network.herokuapp.com/deletePersonalInfo
+  - https://social-network.onrender.com/deletePersonalInfo
 
 - Delete a comment of yours (id)
-  - https://h-social-network.herokuapp.com/deleteComment
+  - https://social-network.onrender.com/deleteComment
  
